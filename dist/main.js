@@ -18655,17 +18655,17 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":28}],146:[function(require,module,exports){
-var CommentBox = React.createClass({
+var CommentBox = React.createClass({displayName: 'CommentBox',
   render: function() {
     return (
-      <div className="commentBox">
-        Hello, world! I am a CommentBox.
-      </div>
+      React.createElement("div", {className: "commentBox"}, 
+        "Hello, world! I am a CommentBox."
+      )
     );
   }
 });
 React.render(
-  <CommentBox />,
+  React.createElement(CommentBox, null),
   document.getElementById('content')
 );
 },{}],147:[function(require,module,exports){
