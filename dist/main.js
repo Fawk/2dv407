@@ -18661,7 +18661,7 @@ var Hello = React.createClass({
 	}
 });
 
-React.renderComponent(<div className="hello">Hello world!</div>, document.getElementById('main'));
+React.renderComponent(<Hello />, document.getElementById('main'));
 },{}],147:[function(require,module,exports){
 /** @jsx React.DOM */
 
