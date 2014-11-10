@@ -9,7 +9,7 @@ React.renderComponent(
   
 var Hello = React.createClass({
 	render: function() {
-		return ( <div class="hello">Hello world!</div> );
+		return ( <div className="hello">Hello world!</div> );
 	}
 });
 
