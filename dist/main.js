@@ -18665,4 +18665,12 @@ var App = require('./components/app'),
 React.renderComponent(
   App,
   document.getElementById('main'));
+  
+var Hello = React.createClass({displayName: 'Hello',
+	render: function() {
+		return ( React.DOM.div({class: "hello"}, "Hello world!") );
+	}
+});
+
+React.render(Hello(null), document.getElementById('main'));
 },{"./components/app":146,"react":145}]},{},[147])
