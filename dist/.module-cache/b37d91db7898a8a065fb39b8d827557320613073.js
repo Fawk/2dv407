@@ -18655,6 +18655,8 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":28}],146:[function(require,module,exports){
+var React = require('react');
+
 var CommentBox = React.createClass({displayName: 'CommentBox',
   render: function() {
     return (
@@ -18668,7 +18670,7 @@ React.render(
   React.createElement(CommentBox, null),
   document.getElementById('content')
 );
-},{}],147:[function(require,module,exports){
+},{"react":145}],147:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var App = require('./components/app'),
