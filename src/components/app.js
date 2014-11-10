@@ -4,4 +4,4 @@ var Hello = React.createClass({
 	}
 });
 
-React.renderComponent(<Hello />, document.getElementById('main'));
+React.renderComponent(<div className="hello">Hello world!</div>, document.getElementById('main'));
