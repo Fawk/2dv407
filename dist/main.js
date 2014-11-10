@@ -18655,7 +18655,13 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":28}],146:[function(require,module,exports){
+var Hello = React.createClass({
+	render: function() {
+		return ( <div className="hello">Hello world!</div> );
+	}
+});
 
+React.renderComponent(<Hello />, document.getElementById('main'));
 },{}],147:[function(require,module,exports){
 /** @jsx React.DOM */
 
@@ -18665,12 +18671,5 @@ var App = require('./components/app'),
 React.renderComponent(
   App,
   document.getElementById('main'));
-  
-var Hello = React.createClass({displayName: 'Hello',
-	render: function() {
-		return ( React.DOM.div({className: "hello"}, "Hello world!") );
-	}
-});
-
-React.renderComponent(Hello(null), document.getElementById('main'));
+ 
 },{"./components/app":146,"react":145}]},{},[147])
