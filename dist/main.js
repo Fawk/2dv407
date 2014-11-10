@@ -18668,9 +18668,9 @@ React.renderComponent(
   
 var Hello = React.createClass({displayName: 'Hello',
 	render: function() {
-		return ( React.DOM.div({class: "hello"}, "Hello world!") );
+		return ( React.DOM.div({className: "hello"}, "Hello world!") );
 	}
 });
 
-React.render(Hello(null), document.getElementById('main'));
+React.renderComponent(Hello(null), document.getElementById('main'));
 },{"./components/app":146,"react":145}]},{},[147])
