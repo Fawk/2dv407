@@ -1,7 +1,13 @@
-var Hello = React.createClass({
-	render: function() {
-		return ( <div className="hello">Hello world!</div> );
-	}
+var CommentBox = React.createClass({
+  render: function() {
+    return (
+      <div className="commentBox">
+        Hello, world! I am a CommentBox.
+      </div>
+    );
+  }
 });
-
-React.renderComponent(<Hello />, document.getElementById('main'));
+React.render(
+  <CommentBox />,
+  document.getElementById('content')
+);
