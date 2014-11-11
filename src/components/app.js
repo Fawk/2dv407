@@ -20,13 +20,20 @@ var FireBaseTest = React.createClass({displayName: 'FireBaseTest',
   
 	componentWillMount: function() {
 		var firebaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/test/");
-		console.log(firebaseRef);
-		this.bindAsArray(firebaseRef.limitToLast(25), "test");
+		this.commentsRef.on('child_added', function(snapshot) {
+            this.comments.push(snapshot.val());
+            this.setState({data: this.comments});
+          }.bind(this));
 	},
 	
 	onChange: function(e) {
-		this.setState({text: e.target.value});
+		this.setState({data: e.target.value});
 	},
+	
+	getInitialState: function() {
+		this.comments = [];
+		return {data: []};
+	}
 	
 });
 
