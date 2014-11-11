@@ -2,8 +2,10 @@ var React = require('react');
 
 var HelloMessage = React.createClass({displayName: 'HelloMessage',
   render: function() {
-    return React.createElement("div", null, "Hello ", this.props.name);
+    return (<div>Hello {this.props.name}</div>);
   }
 });
 
-React.renderComponent(HelloMessage("John"), document.getElementById("content"));
+React.renderComponent(<HelloMessage name="John" />, document.getElementById("content"));
+
+module.exports = HelloMessage;

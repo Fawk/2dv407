@@ -1,17 +1,11 @@
 var React = require('react');
 
-var CommentBox = React.createClass({displayName: 'CommentBox',
+var HelloMessage = React.createClass({displayName: 'HelloMessage',
   render: function() {
-    return (
-      <div className='commentBox'>
-		This is a CommentBox!
-	  </div>
-    );
+    return (<div>Hello {this.props.name}</div>);
   }
 });
-React.renderComponent(
-  <CommentBox />,
-  document.getElementById('content')
-);
 
-module.exports = CommentBox;
+React.renderComponent(<HelloMessage name="John" />, document.getElementById("content"));
+
+module.exports = HelloMessage;
