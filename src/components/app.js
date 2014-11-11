@@ -15,6 +15,7 @@ var FireBaseTest = React.createClass({displayName: 'FireBaseTest',
 	mixins: [ReactFireMixin],
 	
 	render: function() {
+		console.log(this.comments);
 		return (<Message value={ this.comments[0] } />);
 	},
   
