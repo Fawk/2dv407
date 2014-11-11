@@ -1,9 +1,11 @@
 var gulp = require('gulp'),
     browserify = require('gulp-browserify'),
     concat = require('gulp-concat');
+var react = require('gulp-react');
 
 gulp.task('browserify', function() {
-    gulp.src('src/main.js')
+    return gulp.src('src/main.js')
+      .pipe(react())
       .pipe(browserify({transform:"reactify"}))
       .pipe(concat('main.js'))
       .pipe(gulp.dest('dist'));
