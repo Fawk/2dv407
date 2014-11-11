@@ -1,3 +1,5 @@
+/** @jsx React.DOM */
+
 var React = require('react');
 
 var HelloMessage = React.createClass({displayName: 'HelloMessage',
@@ -5,7 +7,5 @@ var HelloMessage = React.createClass({displayName: 'HelloMessage',
     return (<div>Hello {this.props.name}</div>);
   }
 });
-
-React.renderComponent(<HelloMessage name="John" />, document.getElementById("content"));
 
 module.exports = HelloMessage;
