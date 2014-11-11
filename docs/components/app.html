@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>app.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>app.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/** @jsx React.DOM */</span>
+
+<span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-keyword">var</span> Firebase = <span class="hljs-built_in">require</span>(<span class="hljs-string">"firebase"</span>);
+<span class="hljs-keyword">var</span> ReactFireMixin = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reactfire'</span>);
+
+<span class="hljs-keyword">var</span> Message = React.createClass({displayName: <span class="hljs-string">'Message'</span>,
+	render: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+		<span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>{this.props.value}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>);
+	}
+}); 
+
+var FireBaseTest = React.createClass({displayName: 'FireBaseTest',
+	
+	mixins: [ReactFireMixin],
+	
+	render: function() {
+		return (<span class="hljs-tag">&lt;<span class="hljs-title">Message</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">this.comments</span>[<span class="hljs-attribute">0</span>] } /&gt;</span>);
+	},
+  
+	componentWillMount: function() {
+		this.firebaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/test/");
+		this.firebaseRef.on('value', function(snapshot) {
+            this.comments.push(snapshot.val());
+            this.setState({data: this.comments});
+          }.bind(this));
+	},
+	
+	onChange: function(e) {
+		this.setState({data: e.target.value});
+	},
+	
+	getInitialState: function() {
+		this.comments = [];
+		return {data: []};
+	}
+	
+});
+
+module.exports = FireBaseTest;
+</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
