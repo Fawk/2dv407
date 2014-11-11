@@ -10,6 +10,6 @@ var CommentBox = React.createClass({displayName: 'CommentBox',
   }
 });
 React.renderComponent(
-  React.createElement(CommentBox, null),
+  React.createElement(CommentBox, "hej"),
   document.getElementById('content')
 );
