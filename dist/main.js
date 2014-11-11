@@ -18664,20 +18664,15 @@ var HelloMessage = React.createClass({displayName: 'HelloMessage',
     return (React.DOM.div(null, "Hello ", this.props.name));
   }
 });
-
-React.renderComponent(HelloMessage({name: "John"}), document.getElementById("content"));
-
-module.exports = HelloMessage;
 },{"react":145}],147:[function(require,module,exports){
 /** @jsx React.DOM */
 
-var App = require('./components/app'),
+var HelloMessage = require('./components/app'),
     React = require('react');
 
 React.renderComponent(
-  App,
+  HelloMessage({name: "John"}),
   document.getElementById('main'));
   
- module.exports = App;
- 
+ module.exports = HelloMessage;
 },{"./components/app":146,"react":145}]},{},[147])

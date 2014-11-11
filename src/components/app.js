@@ -7,5 +7,3 @@ var HelloMessage = React.createClass({displayName: 'HelloMessage',
     return (<div>Hello {this.props.name}</div>);
   }
 });
-
-module.exports = HelloMessage;

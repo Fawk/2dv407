@@ -7,4 +7,4 @@ React.renderComponent(
   <HelloMessage name="John" />,
   document.getElementById('main'));
   
- module.exports = App;
+ module.exports = HelloMessage;
