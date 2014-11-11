@@ -18675,6 +18675,4 @@ var HelloMessage = require('./components/app'),
 React.renderComponent(
   HelloMessage({name: "John"}),
   document.getElementById('main'));
-  
- module.exports = HelloMessage;
 },{"./components/app":146,"react":145}]},{},[147])

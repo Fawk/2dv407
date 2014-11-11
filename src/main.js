@@ -6,5 +6,3 @@ var HelloMessage = require('./components/app'),
 React.renderComponent(
   <HelloMessage name="John" />,
   document.getElementById('main'));
-  
- module.exports = HelloMessage;
