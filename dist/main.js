@@ -18655,15 +18655,17 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":28}],146:[function(require,module,exports){
+/** @jsx React.DOM */
+
 var React = require('react');
 
 var HelloMessage = React.createClass({displayName: 'HelloMessage',
   render: function() {
-    return (<div>Hello {this.props.name}</div>);
+    return (React.DOM.div(null, "Hello ", this.props.name));
   }
 });
 
-React.renderComponent(<HelloMessage name="John" />, document.getElementById("content"));
+React.renderComponent(HelloMessage({name: "John"}), document.getElementById("content"));
 
 module.exports = HelloMessage;
 },{"react":145}],147:[function(require,module,exports){
