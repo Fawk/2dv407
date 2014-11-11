@@ -18659,20 +18659,39 @@ module.exports = require('./lib/React');
 
 var React = require('react');
 
-var HelloMessage = React.createClass({displayName: 'HelloMessage',
-  render: function() {
-    return (React.DOM.div(null, "Hello ", this.props.name));
-  }
+var Message = React.createClass({displayName: 'Message',
+	render: function() {
+		return (React.DOM.div(null, this.props.value));
+	}
+}); 
+
+var FireBaseTest = React.createClass({displayName: 'FireBaseTest',
+	
+	mixins: [ReactFireMixin],
+	
+	render: function() {
+		return (Message({value:  this.state.test}));
+	},
+  
+	componentWillMount: function() {
+		var firebaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/test/");
+		this.bindAsArray(firebaseRef.limitToLast(25), "test");
+	},
+	
+	onChange: function(e) {
+		this.setState({text: e.target.value});
+	},
+	
 });
 
- module.exports = HelloMessage;
+module.exports = FireBaseTest;
 },{"react":145}],147:[function(require,module,exports){
 /** @jsx React.DOM */
 
-var HelloMessage = require('./components/app'),
+var FireBaseTest = require('./components/app'),
     React = require('react');
 
 React.renderComponent(
-  HelloMessage({name: "John"}),
+  FireBaseTest(null),
   document.getElementById('main'));
 },{"./components/app":146,"react":145}]},{},[147])
