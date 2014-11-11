@@ -6,4 +6,6 @@ var App = require('./components/app'),
 React.renderComponent(
   App,
   document.getElementById('main'));
+  
+ module.exports = App;
  

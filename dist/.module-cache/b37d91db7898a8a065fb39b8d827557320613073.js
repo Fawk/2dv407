@@ -18660,16 +18660,18 @@ var React = require('react');
 var CommentBox = React.createClass({displayName: 'CommentBox',
   render: function() {
     return (
-      React.createElement('div', {className: "commentBox"}, 
-        "Hello, world! I am a CommentBox."
-      )
+      <div className='commentBox'>
+		This is a CommentBox!
+	  </div>
     );
   }
 });
 React.renderComponent(
-  React.createElement(CommentBox, null),
+  <CommentBox />,
   document.getElementById('content')
 );
+
+module.exports = CommentBox;
 },{"react":145}],147:[function(require,module,exports){
 /** @jsx React.DOM */
 
@@ -18679,5 +18681,7 @@ var App = require('./components/app'),
 React.renderComponent(
   App,
   document.getElementById('main'));
+  
+ module.exports = App;
  
 },{"./components/app":146,"react":145}]},{},[147])
