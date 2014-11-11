@@ -4,7 +4,7 @@
   "description": "Just another RIA app",
   "author": "ok222ax",
   "license": "ISC",
-  "scripts": {},
+  "scripts": { "test": "gulp test" },
   "devDependencies": {
     "es6-promise": "2.0.0",
     "firebase": "1.1.2",
