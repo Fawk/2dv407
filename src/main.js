@@ -1,11 +1,11 @@
 /** @jsx React.DOM */
 
-var App = require('./components/app'),
+var HelloMessage = require('./components/app'),
     React = require('react');
 
 React.renderComponent(
-  App,
+  <HelloMessage name="john" />,
   document.getElementById('main'));
   
- module.exports = App;
+
  
