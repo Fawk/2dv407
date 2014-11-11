@@ -18886,8 +18886,8 @@ var FireBaseTest = React.createClass({displayName: 'FireBaseTest',
 	},
   
 	componentWillMount: function() {
-		var firebaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/test/");
-		this.commentsRef.on('child_added', function(snapshot) {
+		this.firebaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/test/");
+		this.firebaseRef.on('child_added', function(snapshot) {
             this.comments.push(snapshot.val());
             this.setState({data: this.comments});
           }.bind(this));
