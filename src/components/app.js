@@ -1,6 +1,8 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var Firebase = require("firebase");
+var ReactFireMixin = require('reactfire');
 
 var Message = React.createClass({displayName: 'Message',
 	render: function() {
