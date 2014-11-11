@@ -18664,6 +18664,8 @@ var HelloMessage = React.createClass({displayName: 'HelloMessage',
     return (React.DOM.div(null, "Hello ", this.props.name));
   }
 });
+
+ module.exports = HelloMessage;
 },{"react":145}],147:[function(require,module,exports){
 /** @jsx React.DOM */
 

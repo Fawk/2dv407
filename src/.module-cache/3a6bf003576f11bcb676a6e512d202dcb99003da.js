@@ -8,4 +8,4 @@ var HelloMessage = React.createClass({displayName: 'HelloMessage',
   }
 });
 
-module.exports = HelloMessage;
+ module.exports = HelloMessage;
