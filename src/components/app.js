@@ -35,12 +35,7 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 		(<div>
 			<Message value={ "Fordon" } />
 			<VehicleList />
-			<div>
-				<form onSubmit={ this.handleSubmit }>
-				  <input onChange={ this.onChange } value={ this.state.text } />
-				  <button>{ "Lägg till fordon" }</button>
-				</form>
-			</div>
+
 		</div>);
 	},
   

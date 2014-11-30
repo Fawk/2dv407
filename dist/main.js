@@ -25690,13 +25690,8 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 		return 
 		(React.DOM.div(null, 
 			Message({value: "Fordon" }), 
-			VehicleList(null), 
-			React.DOM.div(null, 
-				React.DOM.form({onSubmit:  this.handleSubmit}, 
-				  React.DOM.input({onChange:  this.onChange, value:  this.state.text}), 
-				  React.DOM.button(null, "Lägg till fordon" )
-				)
-			)
+			VehicleList(null)
+
 		));
 	},
   
