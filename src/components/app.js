@@ -79,4 +79,4 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
   
 });
 
-module.exports = FireBaseTest;
+module.exports = VehicleCRUD;
