@@ -25676,12 +25676,12 @@ var Vehicle = React.createClass({displayName: 'Vehicle',
 var VehicleList = React.createClass({displayName: 'VehicleList',
   render: function() {
 	return 
-		(React.DOM.ul(null, 
-			 this.state.items.map(function(item, key) { 
-					Vechicle({key: key, item: item}) 
-				}) 
-			
-		));
+	(React.DOM.ul(null, 
+		 this.state.items.map(function(i, k) { 
+				Vechicle({key: k, item: i}) 
+			}) 
+		
+	));
 	}
 });
 
@@ -25690,18 +25690,17 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 	mixins: [ReactFireMixin],
 	
 	render: function() {
-		return (
+		return 
+		(React.DOM.div(null, 
+			Message({value: "Fordon" }), 
+			VehicleList(null), 
 			React.DOM.div(null, 
-				Message({value: "Fordon" }), 
-				VehicleList(null), 
-				React.DOM.div(null, 
-					React.DOM.form({onSubmit:  this.handleSubmit}, 
-					  React.DOM.input({onChange:  this.onChange, value:  this.state.text}), 
-					  React.DOM.button(null, "Lägg till fordon" )
-					)
+				React.DOM.form({onSubmit:  this.handleSubmit}, 
+				  React.DOM.input({onChange:  this.onChange, value:  this.state.text}), 
+				  React.DOM.button(null, "Lägg till fordon" )
 				)
 			)
-		);
+		));
 	},
   
 	componentWillMount: function() {

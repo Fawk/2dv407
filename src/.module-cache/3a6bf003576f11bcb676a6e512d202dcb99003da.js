@@ -20,12 +20,12 @@ var Vehicle = React.createClass({
 var VehicleList = React.createClass({
   render: function() {
 	return 
-		(<ul>
-			{ this.state.items.map(function(item, key) { 
-					<Vechicle key={key} item={item} /> 
-				}) 
-			}
-		</ul>);
+	(<ul>
+		{ this.state.items.map(function(i, k) { 
+				<Vechicle key={k} item={i} /> 
+			}) 
+		}
+	</ul>);
 	}
 });
 
@@ -34,18 +34,17 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 	mixins: [ReactFireMixin],
 	
 	render: function() {
-		return (
+		return 
+		(<div>
+			<Message value={ "Fordon" } />
+			<VehicleList />
 			<div>
-				<Message value={ "Fordon" } />
-				<VehicleList />
-				<div>
-					<form onSubmit={ this.handleSubmit }>
-					  <input onChange={ this.onChange } value={ this.state.text } />
-					  <button>{ "Lägg till fordon" }</button>
-					</form>
-				</div>
+				<form onSubmit={ this.handleSubmit }>
+				  <input onChange={ this.onChange } value={ this.state.text } />
+				  <button>{ "Lägg till fordon" }</button>
+				</form>
 			</div>
-		);
+		</div>);
 	},
   
 	componentWillMount: function() {
