@@ -34,7 +34,7 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 		return 
 		(<div>
 			<Message value={ "Fordon" } />
-			<VehicleList />
+
 
 		</div>);
 	},

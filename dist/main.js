@@ -25689,8 +25689,8 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 	render: function() {
 		return 
 		(React.DOM.div(null, 
-			Message({value: "Fordon" }), 
-			VehicleList(null)
+			Message({value: "Fordon" })
+
 
 		));
 	},
