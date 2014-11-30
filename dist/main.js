@@ -18887,6 +18887,7 @@ var FireBaseTest = React.createClass({displayName: 'FireBaseTest',
   
 	componentWillMount: function() {
 		this.bindAsArray(new Firebase("https://blinding-torch-8626.firebaseio.com/test/"), "items");
+		console.log(this.items);
 
 	},
 	
