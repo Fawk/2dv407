@@ -25739,7 +25739,7 @@ module.exports = VehicleCRUD;
 },{"firebase":1,"lodash":3,"react":147,"reactfire":148}],150:[function(require,module,exports){
 /** @jsx React.DOM */
 
-var FireBaseTest = require('./components/app'),
+var VehicleCRUD = require('./components/app'),
     React = require('react');
 
 React.renderComponent(

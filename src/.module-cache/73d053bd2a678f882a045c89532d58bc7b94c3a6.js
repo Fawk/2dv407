@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-var FireBaseTest = require('./components/app'),
+var VehicleCRUD = require('./components/app'),
     React = require('react');
 
 React.renderComponent(
