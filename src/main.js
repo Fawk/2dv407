@@ -4,5 +4,5 @@ var FireBaseTest = require('./components/app'),
     React = require('react');
 
 React.renderComponent(
-  <FireBaseTest />,
+  <VehicleCRUD />,
   document.getElementById('main'));
