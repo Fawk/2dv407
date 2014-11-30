@@ -19,7 +19,7 @@ var FireBaseTest = React.createClass({displayName: 'FireBaseTest',
 	},
   
 	componentWillMount: function() {
-		var fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/test/");
+		var fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/");
 		this.bindAsArray(fireBaseRef, "items");
 	},
 	
