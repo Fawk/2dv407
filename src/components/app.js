@@ -15,15 +15,12 @@ var FireBaseTest = React.createClass({displayName: 'FireBaseTest',
 	mixins: [ReactFireMixin],
 	
 	render: function() {
-		return (<Message value={ this.comments[0] } />);
+		return (<Message value={ this.items[0] } />);
 	},
   
 	componentWillMount: function() {
-		this.firebaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/test/");
-		this.firebaseRef.on('value', function(snapshot) {
-            this.comments.push(snapshot.val());
-            this.setState({data: this.comments});
-          }.bind(this));
+		this.bindAsArray(new Firebase("https://blinding-torch-8626.firebaseio.com/test/"), "items");
+
 	},
 	
 	onChange: function(e) {
@@ -31,7 +28,7 @@ var FireBaseTest = React.createClass({displayName: 'FireBaseTest',
 	},
 	
 	getInitialState: function() {
-		this.comments = [];
+		this.items = [];
 		return {data: []};
 	}
 	
