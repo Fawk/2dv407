@@ -25672,7 +25672,7 @@ var VehicleList = React.createClass({displayName: 'VehicleList',
 		var createItem = function(i, k) {
 			return React.DOM.li({key: k }, i );
 		};
-		return React.DOM.ul(null,  this.state.items.map(createItem) );
+		return React.DOM.ul(null,  this.props.items.map(createItem) );
 	}
 });
 
@@ -25683,7 +25683,7 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 	render: function() {
 		return (React.DOM.div(null, 
 			Message({value: "Fordon" }), 
-			VehicleList(null), 
+			VehicleList({items:  this.state.items}), 
 			React.DOM.div(null, 
 				React.DOM.form({onSubmit:  this.handleSubmit}, 
 				  React.DOM.input({onChange:  this.onChange, value:  this.state.text}), 

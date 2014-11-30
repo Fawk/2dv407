@@ -16,7 +16,7 @@ var VehicleList = React.createClass({
 		var createItem = function(i, k) {
 			return <li key={ k }>{ i }</li>;
 		};
-		return <ul>{ this.state.items.map(createItem) }</ul>;
+		return <ul>{ this.props.items.map(createItem) }</ul>;
 	}
 });
 
@@ -27,7 +27,7 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 	render: function() {
 		return (<div>
 			<Message value={ "Fordon" } />
-			<VehicleList />
+			<VehicleList items={ this.state.items } />
 			<div>
 				<form onSubmit={ this.handleSubmit }>
 				  <input onChange={ this.onChange } value={ this.state.text } />
