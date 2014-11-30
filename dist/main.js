@@ -25669,16 +25669,13 @@ var Message = React.createClass({displayName: 'Message',
 
 var Vehicle = React.createClass({displayName: 'Vehicle',
 	render: function() {
-		return (React.DOM.li({key:  this.props.key},  this.props.item));
+		return (React.DOM.div(null, React.DOM.li({key:  this.props.key},  this.props.item)));
 	}
 });
 
 var VehicleList = React.createClass({displayName: 'VehicleList',
   render: function() {
-	return 
-	(React.DOM.div(null
-
-	));
+	return (React.DOM.div(null));
 	}
 });
 
@@ -25687,12 +25684,7 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 	mixins: [ReactFireMixin],
 	
 	render: function() {
-		return 
-		(React.DOM.div(null, 
-			Message({value: "Fordon" })
-
-
-		));
+		return (React.DOM.div(null, Message({value: "Fordon" })));
 	},
   
 	componentWillMount: function() {
