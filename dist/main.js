@@ -25676,11 +25676,13 @@ var Vehicle = React.createClass({displayName: 'Vehicle',
 var VehicleList = React.createClass({displayName: 'VehicleList',
   render: function() {
 	return 
-	(React.DOM.ul(null, 
-		 this.state.items.map(function(i, k) { 
-				Vechicle({key: k, item: i}) 
-			}) 
-		
+	(React.DOM.div(null, 
+		React.DOM.ul(null, 
+			 this.state.items.map(function(i, k) { 
+					Vechicle({key: k, item: i}) 
+				}) 
+			
+		)
 	));
 	}
 });

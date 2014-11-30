@@ -20,12 +20,14 @@ var Vehicle = React.createClass({
 var VehicleList = React.createClass({
   render: function() {
 	return 
-	(<ul>
-		{ this.state.items.map(function(i, k) { 
-				<Vechicle key={k} item={i} /> 
-			}) 
-		}
-	</ul>);
+	(<div>
+		<ul>
+			{ this.state.items.map(function(i, k) { 
+					<Vechicle key={k} item={i} /> 
+				}) 
+			}
+		</ul>
+	</div>);
 	}
 });
 
