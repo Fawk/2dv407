@@ -38,6 +38,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
   
 	componentWillMount: function() {
 		var fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars/");
+		console.log(this.state);
 		this.bindAsArray(fireBaseRef, "cars");
 	},
 	
