@@ -18880,7 +18880,7 @@ var Message = React.createClass({displayName: 'Message',
 var CarList = React.createClass({displayName: 'CarList',
   render: function() {
 		var createItem = function(i, k) {
-			return React.DOM.li({key: k },  i.name, React.DOM.a({href: "#", onClick:  this.props.crud.removeCar(k) }, "Ta bort" ));
+			return React.DOM.li({key: k },  i.name, React.DOM.a({href: "#", onClick:  this.props.func(k) }, "Ta bort" ));
 		};
 		if(this.props.items !== undefined) {
 			return React.DOM.ul(null,  this.props.items.map(createItem) );
@@ -18897,7 +18897,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	render: function() {
 		return (React.DOM.div(null, 
 			Message({value: "Bilar redo att bokas:" }), 
-			CarList({items:  this.state.cars, crud: this }), 
+			CarList({items:  this.state.cars, func:  this.removeCar}), 
 			React.DOM.div(null, 
 				React.DOM.form({onSubmit:  this.handleSubmit}, 
 				  React.DOM.input({onChange:  this.onChange, value:  this.state.text}), 
