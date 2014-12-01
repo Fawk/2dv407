@@ -13,7 +13,7 @@ var Message = React.createClass({displayName: 'Message',
 var CarList = React.createClass({
   render: function() {
 		var createItem = function(i, k) {
-			return <li key={ k }>{ i.name }<a href='#' onClick={ this.removeCar(k) }>{ "Ta bort" }</a></li>;
+			return <li key={ k }>{ i.name }<a href='#' onClick={ CarCRUD.removeCar(k) }>{ "Ta bort" }</a></li>;
 		};
 		if(this.props.items !== undefined) {
 			return <ul>{ this.props.items.map(createItem) }</ul>;
