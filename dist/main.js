@@ -18924,8 +18924,9 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		return this.state.cars[id];
 	},
 	
-	removeCar: function(id) {
-		 delete this.firebaseRefs["cars"][id];
+	removeCar: function(e, id) {
+		e.preventDefault();
+		delete this.firebaseRefs["cars"][id];
 	},
 	
 	handleSubmit: function(e) {
