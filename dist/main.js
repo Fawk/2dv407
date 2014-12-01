@@ -18877,35 +18877,35 @@ var Message = React.createClass({displayName: 'Message',
 	}
 }); 
 
-var VehicleList = React.createClass({displayName: 'VehicleList',
+var CarList = React.createClass({displayName: 'CarList',
   render: function() {
 		var createItem = function(i, k) {
-			return React.DOM.li({key: k }, i );
+			return React.DOM.li({key: k },  i.name);
 		};
 		return React.DOM.ul(null,  this.props.items.map(createItem) );
 	}
 });
 
-var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
+var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	
 	mixins: [ReactFireMixin],
 	
 	render: function() {
 		return (React.DOM.div(null, 
-			Message({value: "Fordon" }), 
-			VehicleList({items:  this.state.items}), 
+			Message({value: "Bilar redo att bokas:" }), 
+			CarList({items:  this.state.cars}), 
 			React.DOM.div(null, 
 				React.DOM.form({onSubmit:  this.handleSubmit}, 
 				  React.DOM.input({onChange:  this.onChange, value:  this.state.text}), 
-				  React.DOM.button(null, "Lägg till fordon" )
+				  React.DOM.button(null, "Lägg till bil" )
 				)
 			)
 		));
 	},
   
 	componentWillMount: function() {
-		var fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/");
-		this.bindAsArray(fireBaseRef, "items");
+		var fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars/");
+		this.bindAsArray(fireBaseRef, "cars");
 	},
 	
 	onChange: function(e) {
@@ -18916,32 +18916,36 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 		return {items: [], text: ""};
 	},
 	
-	getVehicle: function(id) {
-		return this.state.items[id];
+	getCar: function(id) {
+		return this.state.cars[id];
 	},
 	
-	addVehicle: function() {
+	addCar: function() {
+	
+	},
+	
+	removeCar: function() {
 	
 	},
 	
 	handleSubmit: function(e) {
 		e.preventDefault();
 		if (this.state.text && this.state.text.trim().length !== 0) {
-		  this.firebaseRefs["items"].push(this.state.text);
+		  this.firebaseRefs["cars"].push({ name: this.state.text, price: 1200 });
 		  this.setState({text: ""});
 		}
 	  },
   
 });
 
-module.exports = VehicleCRUD;
+module.exports = CarCRUD;
 },{"firebase":1,"react":146,"reactfire":147}],149:[function(require,module,exports){
 /** @jsx React.DOM */
 
-var VehicleCRUD = require('./components/app'),
+var CarCRUD = require('./components/app'),
     React = require('react');
 
 React.renderComponent(
-  VehicleCRUD(null),
+  CarCRUD(null),
   document.getElementById('main'));
 },{"./components/app":148,"react":146}]},{},[149])

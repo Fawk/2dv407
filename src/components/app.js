@@ -10,35 +10,35 @@ var Message = React.createClass({displayName: 'Message',
 	}
 }); 
 
-var VehicleList = React.createClass({
+var CarList = React.createClass({
   render: function() {
 		var createItem = function(i, k) {
-			return <li key={ k }>{ i }</li>;
+			return <li key={ k }>{ i.name }</li>;
 		};
 		return <ul>{ this.props.items.map(createItem) }</ul>;
 	}
 });
 
-var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
+var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	
 	mixins: [ReactFireMixin],
 	
 	render: function() {
 		return (<div>
-			<Message value={ "Fordon" } />
-			<VehicleList items={ this.state.items } />
+			<Message value={ "Bilar redo att bokas:" } />
+			<CarList items={ this.state.cars } />
 			<div>
 				<form onSubmit={ this.handleSubmit }>
 				  <input onChange={ this.onChange } value={ this.state.text } />
-				  <button>{ "Lägg till fordon" }</button>
+				  <button>{ "Lägg till bil" }</button>
 				</form>
 			</div>
 		</div>);
 	},
   
 	componentWillMount: function() {
-		var fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/");
-		this.bindAsArray(fireBaseRef, "items");
+		var fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars/");
+		this.bindAsArray(fireBaseRef, "cars");
 	},
 	
 	onChange: function(e) {
@@ -49,22 +49,26 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 		return {items: [], text: ""};
 	},
 	
-	getVehicle: function(id) {
-		return this.state.items[id];
+	getCar: function(id) {
+		return this.state.cars[id];
 	},
 	
-	addVehicle: function() {
+	addCar: function() {
+	
+	},
+	
+	removeCar: function() {
 	
 	},
 	
 	handleSubmit: function(e) {
 		e.preventDefault();
 		if (this.state.text && this.state.text.trim().length !== 0) {
-		  this.firebaseRefs["items"].push(this.state.text);
+		  this.firebaseRefs["cars"].push({ name: this.state.text, price: 1200 });
 		  this.setState({text: ""});
 		}
 	  },
   
 });
 
-module.exports = VehicleCRUD;
+module.exports = CarCRUD;
