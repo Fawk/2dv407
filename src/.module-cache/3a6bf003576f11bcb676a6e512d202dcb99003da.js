@@ -13,7 +13,7 @@ var Message = React.createClass({displayName: 'Message',
 var CarList = React.createClass({
   render: function() {
 		var createItem = function(i, k) {
-			return <li key={ k }>{ i.name }<a href='#' onClick={ CarCRUD.removeCar(k) }>{ "Ta bort" }</a></li>;
+			return <li key={ k }>{ i.name }<a href='#' onClick={ this.props.crud.removeCar(k) }>{ "Ta bort" }</a></li>;
 		};
 		if(this.props.items !== undefined) {
 			return <ul>{ this.props.items.map(createItem) }</ul>;
@@ -30,7 +30,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	render: function() {
 		return (<div>
 			<Message value={ "Bilar redo att bokas:" } />
-			<CarList items={ this.state.cars } />
+			<CarList items={ this.state.cars } crud={ this } />
 			<div>
 				<form onSubmit={ this.handleSubmit }>
 				  <input onChange={ this.onChange } value={ this.state.text } />
