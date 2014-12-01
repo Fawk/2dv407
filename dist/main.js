@@ -18882,7 +18882,11 @@ var CarList = React.createClass({displayName: 'CarList',
 		var createItem = function(i, k) {
 			return React.DOM.li({key: k },  i.name);
 		};
-		return React.DOM.ul(null,  this.props.items.map(createItem) );
+		if(this.props.items.length > 0) {
+			return React.DOM.ul(null,  this.props.items.map(createItem) );
+		} else {
+			return React.DOM.ul(null, "Det fanns inga bilar!" );
+		}
 	}
 });
 
@@ -18904,9 +18908,9 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	},
   
 	componentWillMount: function() {
-		var fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars/");
-		console.log(this.state);
+		var fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars");
 		this.bindAsArray(fireBaseRef, "cars");
+		console.log(this.state);
 	},
 	
 	onChange: function(e) {

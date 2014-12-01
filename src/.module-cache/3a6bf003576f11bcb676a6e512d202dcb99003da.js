@@ -15,7 +15,11 @@ var CarList = React.createClass({
 		var createItem = function(i, k) {
 			return <li key={ k }>{ i.name }</li>;
 		};
-		return <ul>{ this.props.items.map(createItem) }</ul>;
+		if(this.props.items.length > 0) {
+			return <ul>{ this.props.items.map(createItem) }</ul>;
+		} else {
+			return <ul>{ "Det fanns inga bilar!" }</ul>;
+		}
 	}
 });
 
@@ -37,9 +41,9 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	},
   
 	componentWillMount: function() {
-		var fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars/");
-		console.log(this.state);
+		var fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars");
 		this.bindAsArray(fireBaseRef, "cars");
+		console.log(this.state);
 	},
 	
 	onChange: function(e) {
