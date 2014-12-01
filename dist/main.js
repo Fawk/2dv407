@@ -18879,8 +18879,9 @@ var Message = React.createClass({displayName: 'Message',
 
 var CarList = React.createClass({displayName: 'CarList',
   render: function() {
+		var that = this;
 		var createItem = function(i, k) {
-			return React.DOM.li({key: k },  i.name, React.DOM.a({href: "#", onClick:  this.props.func(k) }, "Ta bort" ));
+			return React.DOM.li({key: k },  i.name, React.DOM.a({href: "#", onClick:  that.props.func(k) }, "Ta bort" ));
 		};
 		if(this.props.items !== undefined) {
 			return React.DOM.ul(null,  this.props.items.map(createItem) );
