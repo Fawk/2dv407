@@ -18882,7 +18882,7 @@ var CarList = React.createClass({displayName: 'CarList',
 		var createItem = function(i, k) {
 			return React.DOM.li({key: k },  i.name);
 		};
-		if(this.props.items.length > 0) {
+		if(this.props.items.length !== undefined) {
 			return React.DOM.ul(null,  this.props.items.map(createItem) );
 		} else {
 			return React.DOM.ul(null, "Det fanns inga bilar!" );
