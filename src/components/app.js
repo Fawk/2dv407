@@ -78,7 +78,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	handleSubmit: function(e) {
 		e.preventDefault();
 		if (this.state.text && this.state.text.trim().length !== 0) {
-		  this.firebaseRef.push({ name: this.state.text, price: 1200 });
+		  this.fireBaseRef.push({ name: this.state.text, price: 1200 });
 		  this.setState({text: ""});
 		}
     }
