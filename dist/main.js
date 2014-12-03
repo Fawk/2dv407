@@ -18871,7 +18871,7 @@ var CarList = React.createClass({displayName: 'CarList',
 		var createItem = function(i, k) {
 			return React.DOM.li({key:  i.key},  i.val.name, React.DOM.a({href: "#", onClick:  function(e) { that.props.func(e, i.key); }}, "Ta bort" ));
 		};
-		if(this.props.items !== undefined || this.props.items.length == 0) {
+		if(this.props.items !== undefined && this.props.items.length != 0) {
 			return React.DOM.ul(null,  this.props.items.map(createItem) );
 		} else {
 			return React.DOM.ul(null, "Det fanns inga bilar!" );
