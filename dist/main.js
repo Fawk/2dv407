@@ -18869,7 +18869,7 @@ var CarList = React.createClass({displayName: 'CarList',
   render: function() {
 		var that = this;
 		var createItem = function(i, k) {
-			return React.DOM.li({key:  i.key},  i.val.name, React.DOM.a({href: "#", onClick:  function(e) { that.props.func(e, i); }}, "Ta bort" ));
+			return React.DOM.li({key:  i.key},  i.val.name, React.DOM.a({href: "#", onClick:  function(e) { that.props.func(e, i.val.name); }}, "Ta bort" ));
 		};
 		if(this.props.items !== undefined) {
 			return React.DOM.ul(null,  this.props.items.map(createItem) );
