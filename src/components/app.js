@@ -2,7 +2,6 @@
 
 var React = require('react');
 var Firebase = require("firebase");
-var ReactFireMixin = require('reactfire');
 
 var Message = React.createClass({displayName: 'Message',
 	render: function() {
@@ -27,6 +26,7 @@ var CarList = React.createClass({
 var CarCRUD = React.createClass({displayName: 'CarCRUD',
 
 	firebaseRef: null,
+	state: {},
 
 	render: function() {
 		return (<div>
@@ -43,9 +43,8 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
   
 	componentWillMount: function() {
 		this.fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars");
-		this.setState({ cars: [] });
 		this.fireBaseRef.on("value", function(snapshot) {
-			this.state.cars[snapshot.key()] = snapshot.val();
+			this.setState({ cars: { key: snapshot.key(), value: snapshot.val() }});
 		});
 	},
 	
@@ -74,10 +73,23 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	handleSubmit: function(e) {
 		e.preventDefault();
 		if (this.state.text && this.state.text.trim().length !== 0) {
-		  this.firebaseRefs.push({ name: this.state.text, price: 1200 });
+		  this.firebaseRef.push({ name: this.state.text, price: 1200 });
 		  this.setState({text: ""});
 		}
-	  },
+    },
+	
+	setState: function(obj) {
+		Object.keys(obj).forEach(function(key) {
+			if(obj[key] !== null && obj[key] instanceof 'object') {
+				if(!this.state.hasOwnPropery(key))
+					this.state[key] = [];
+
+				this.state[key].push(obj[key]);
+			} else {
+				this.state[key] = obj[key];
+			}
+		});
+	}
   
 });
 

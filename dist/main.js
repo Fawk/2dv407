@@ -18854,22 +18854,10 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":29}],147:[function(require,module,exports){
-/*!
- * ReactFire is an open-source JavaScript library that allows you to add a
- * realtime data source to your React apps by providing and easy way to let
- * Firebase populate the state of React components.
- *
- * ReactFire 0.3.0
- * https://github.com/firebase/reactfire/
- * License: MIT
- */
-!function(e,t){"use strict";"object"==typeof exports?module.exports=t():"function"==typeof define&&define.amd?define([],function(){return e.ReactFireMixin=t()}):e.ReactFireMixin=t()}(this,function(){"use strict";var e={componentWillMount:function(){this.firebaseRefs={},this.firebaseListeners={}},componentWillUnmount:function(){for(var e in this.firebaseRefs)this.firebaseRefs.hasOwnProperty(e)&&this.unbind(e)},bindAsArray:function(e,t){this._bind(e,t,!0)},bindAsObject:function(e,t){this._bind(e,t,!1)},_bind:function(e,t,i){this._validateBindVar(t);var n,r;if("[object Object]"!==Object.prototype.toString.call(e)?(n="firebaseRef must be an instance of Firebase",r="INVALID_FIREBASE_REF"):"boolean"!=typeof i&&(n="bindAsArray must be a boolean. Got: "+i,r="INVALID_BIND_AS_ARRAY"),"undefined"!=typeof n){var o=new Error("ReactFire: "+n);throw o.code=r,o}this.firebaseRefs[t]=e.ref(),this.firebaseListeners[t]=e.on("value",function(e){var n={};n[t]=i?this._toArray(e.val()):e.val(),this.setState(n)}.bind(this))},unbind:function(e){if(this._validateBindVar(e),"undefined"==typeof this.firebaseRefs[e]){var t=new Error('ReactFire: unexpected value for bindVar. "'+e+'" was either never bound or has already been unbound');throw t.code="UNBOUND_BIND_VARIABLE",t}this.firebaseRefs[e].off("value",this.firebaseListeners[e]),delete this.firebaseRefs[e],delete this.firebaseListeners[e]},_validateBindVar:function(e){var t;if("string"!=typeof e?t="bindVar must be a string. Got: "+e:0===e.length?t='bindVar must be a non-empty string. Got: ""':e.length>768?t="bindVar is too long to be stored in Firebase. Got: "+e:/[\[\].#$\/\u0000-\u001F\u007F]/.test(e)&&(t="bindVar cannot contain any of the following characters: . # $ ] [ /. Got: "+e),"undefined"!=typeof t){var i=new Error("ReactFire: "+t);throw i.code="INVALID_BIND_VARIABLE",i}},_isArray:function(e){return"[object Array]"===Object.prototype.toString.call(e)},_toArray:function(e){var t=[];if(e)if(this._isArray(e))t=e;else if("object"==typeof e)for(var i in e)e.hasOwnProperty(i)&&t.push(e[i]);return t}};return e});
-},{}],148:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var React = require('react');
 var Firebase = require("firebase");
-var ReactFireMixin = require('reactfire');
 
 var Message = React.createClass({displayName: 'Message',
 	render: function() {
@@ -18894,6 +18882,7 @@ var CarList = React.createClass({displayName: 'CarList',
 var CarCRUD = React.createClass({displayName: 'CarCRUD',
 
 	firebaseRef: null,
+	state: {},
 
 	render: function() {
 		return (React.DOM.div(null, 
@@ -18910,9 +18899,8 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
   
 	componentWillMount: function() {
 		this.fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars");
-		this.setState({ cars: [] });
 		this.fireBaseRef.on("value", function(snapshot) {
-			this.state.cars[snapshot.key()] = snapshot.val();
+			this.setState({ cars: { key: snapshot.key(), value: snapshot.val() }});
 		});
 	},
 	
@@ -18941,15 +18929,28 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	handleSubmit: function(e) {
 		e.preventDefault();
 		if (this.state.text && this.state.text.trim().length !== 0) {
-		  this.firebaseRefs.push({ name: this.state.text, price: 1200 });
+		  this.firebaseRef.push({ name: this.state.text, price: 1200 });
 		  this.setState({text: ""});
 		}
-	  },
+    },
+	
+	setState: function(obj) {
+		Object.keys(obj).forEach(function(key) {
+			if(obj[key] !== null && obj[key] instanceof 'object') {
+				if(!this.state.hasOwnPropery(key))
+					this.state[key] = [];
+
+				this.state[key].push(obj[key]);
+			} else {
+				this.state[key] = obj[key];
+			}
+		});
+	}
   
 });
 
 module.exports = CarCRUD;
-},{"firebase":1,"react":146,"reactfire":147}],149:[function(require,module,exports){
+},{"firebase":1,"react":146}],148:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var CarCRUD = require('./components/app'),
@@ -18958,4 +18959,4 @@ var CarCRUD = require('./components/app'),
 React.renderComponent(
   CarCRUD(null),
   document.getElementById('main'));
-},{"./components/app":148,"react":146}]},{},[149])
+},{"./components/app":147,"react":146}]},{},[148])
