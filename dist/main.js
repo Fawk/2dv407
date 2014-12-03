@@ -18882,7 +18882,6 @@ var CarList = React.createClass({displayName: 'CarList',
 var CarCRUD = React.createClass({displayName: 'CarCRUD',
 
 	firebaseRef: null,
-	state: {},
 
 	render: function() {
 		return (React.DOM.div(null, 
@@ -18899,8 +18898,10 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
   
 	componentWillMount: function() {
 		this.fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars");
+		this.setState({ cars: [] });
 		this.fireBaseRef.on("value", function(snapshot) {
-			this.setState({ cars: { key: snapshot.key(), value: snapshot.val() }});
+			this.state.cars.push({ key: snapshot.key(), value: snapshot.val() });
+			this.forceUpdate();
 		});
 	},
 	
@@ -18934,7 +18935,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		}
     },
 	
-	setState: function(obj) {
+	/*setState: function(obj) {
 		Object.keys(obj).forEach(function(key) {
 			if(obj[key] !== null && obj[key] instanceof 'object') {
 				if(!this.state.hasOwnPropery(key))
@@ -18945,7 +18946,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 				this.state[key] = obj[key];
 			}
 		});
-	}
+	}*/
   
 });
 
