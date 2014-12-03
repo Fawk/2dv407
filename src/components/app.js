@@ -70,7 +70,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		e.preventDefault();
 		this.fireBaseRef.child(id).remove();
 		delete this.cars[id];
-		//this.forceUpdate();
+		this.forceUpdate();
 	},
 	
 	handleSubmit: function(e) {
@@ -78,6 +78,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		if (this.state.text && this.state.text.trim().length !== 0) {
 		  this.fireBaseRef.push({ name: this.state.text, price: 1200 });
 		  this.setState({text: ""});
+		  		this.forceUpdate();
 		}
     }
   
