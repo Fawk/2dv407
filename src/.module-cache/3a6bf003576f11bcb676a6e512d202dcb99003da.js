@@ -25,9 +25,9 @@ var CarList = React.createClass({
 });
 
 var CarCRUD = React.createClass({displayName: 'CarCRUD',
-	
-	mixins: [ReactFireMixin],
-	
+
+	firebaseRef: null,
+
 	render: function() {
 		return (<div>
 			<Message value={ "Bilar redo att bokas:" } />
@@ -42,8 +42,10 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	},
   
 	componentWillMount: function() {
-		var fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars");
-		this.bindAsArray(fireBaseRef, "cars");
+		this.fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars");
+		this.fireBaseRef.on("value", function(snapshot) {
+			this.state.cars[snapshot.key()] = snapshot.val();
+		});
 	},
 	
 	onChange: function(e) {
@@ -61,16 +63,17 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	removeCar: function(e, id) {
 	
 		console.log(id);
-		console.log(this.firebaseRefs["cars"]);
+		console.log(this.firebaseRef);
 	
 		e.preventDefault();
-		this.firebaseRefs["cars"][id] = null;
+		var ref = new Firebase("https://blinding-torch-8626.firebaseio.com/cars/" + id);
+		ref.remove();
 	},
 	
 	handleSubmit: function(e) {
 		e.preventDefault();
 		if (this.state.text && this.state.text.trim().length !== 0) {
-		  this.firebaseRefs["cars"].push({ name: this.state.text, price: 1200 });
+		  this.firebaseRefs.push({ name: this.state.text, price: 1200 });
 		  this.setState({text: ""});
 		}
 	  },
