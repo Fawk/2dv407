@@ -12,7 +12,10 @@ var Message = React.createClass({displayName: 'Message',
 var CarList = React.createClass({
   render: function() {
 		var that = this;
+		console.log(this.props);
 		var createItem = function(i, k) {
+			console.log(i);
+			console.log(k);
 			return <li key={ k }>{ i.name }<a href='#' onClick={ function(e) { that.props.func(e, i); } }>{ "Ta bort" }</a></li>;
 		};
 		if(this.props.items !== undefined) {
