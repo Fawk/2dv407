@@ -69,7 +69,13 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		
 		e.preventDefault();
 		this.fireBaseRef.child(id).remove();
-		delete this.cars[id];
+		for(var i in this.cars) {
+			if(this.cars[i].key == id) {
+				delete this.cars[i];
+				break;
+			}	
+		}
+
 		this.setState({ cars: this.cars });
 	},
 	
