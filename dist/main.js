@@ -18908,6 +18908,8 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 			}
 			
 			that.setState({ cars: this.cars });
+			console.log("Loaded");
+			console.log(this.cars);
 		}).bind(this);
 	},
 	
@@ -18935,6 +18937,8 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		}
 
 		this.setState({ cars: this.cars });
+		console.log("removeCar");
+		console.log(this.cars);
 	},
 	
 	handleSubmit: function(e) {
@@ -18942,6 +18946,8 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		if (this.state.text && this.state.text.trim().length !== 0) {
 		  this.fireBaseRef.push({ name: this.state.text, price: 1200 });
 		  this.setState({text: ""});
+			console.log("addCar");
+			console.log(this.cars);
 		}
     }
   
