@@ -31,7 +31,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	render: function() {
 		return (<div>
 			<Message value={ "Bilar redo att bokas:" } />
-			<CarList items={ this.state.cars } func={ this.removeCar } />
+			<CarList items={ this.cars } func={ this.removeCar } />
 			<div>
 				<form onSubmit={ this.handleSubmit }>
 				  <input onChange={ this.onChange } value={ this.state.text } />

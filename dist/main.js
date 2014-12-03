@@ -18887,7 +18887,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	render: function() {
 		return (React.DOM.div(null, 
 			Message({value: "Bilar redo att bokas:" }), 
-			CarList({items:  this.state.cars, func:  this.removeCar}), 
+			CarList({items:  this.cars, func:  this.removeCar}), 
 			React.DOM.div(null, 
 				React.DOM.form({onSubmit:  this.handleSubmit}, 
 				  React.DOM.input({onChange:  this.onChange, value:  this.state.text}), 
