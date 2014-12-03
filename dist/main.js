@@ -18904,9 +18904,9 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 			Object.keys(snapshot.val()).forEach(function(key) {
 				that.cars.push({ key: key, val: snapshot.val()[key] });
 			});
+			
+			this.setState({ cars: this.cars });
 		}).bind(this);
-		
-		this.setState({ cars: this.cars });
 	},
 	
 	onChange: function(e) {
