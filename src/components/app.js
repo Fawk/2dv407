@@ -13,7 +13,7 @@ var CarList = React.createClass({
   render: function() {
 		var that = this;
 		var createItem = function(i, k) {
-			return <li key={ i.key }>{ i.val.name }<a href='#' onClick={ function(e) { that.props.func(e, i.val.name); } }>{ "Ta bort" }</a></li>;
+			return <li key={ i.key }>{ i.val.name }<a href='#' onClick={ function(e) { that.props.func(e, i.key); } }>{ "Ta bort" }</a></li>;
 		};
 		if(this.props.items !== undefined) {
 			return <ul>{ this.props.items.map(createItem) }</ul>;
@@ -68,11 +68,13 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	removeCar: function(e, id) {
 	
 		console.log(id);
-		console.log(this.firebaseRef);
-	
+		
 		e.preventDefault();
 		var ref = new Firebase("https://blinding-torch-8626.firebaseio.com/cars/" + id);
 		ref.remove();
+		
+		delete this.cars[id];
+		this.forcedUpdate();
 	},
 	
 	handleSubmit: function(e) {

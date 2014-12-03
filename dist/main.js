@@ -18869,7 +18869,7 @@ var CarList = React.createClass({displayName: 'CarList',
   render: function() {
 		var that = this;
 		var createItem = function(i, k) {
-			return React.DOM.li({key:  i.key},  i.val.name, React.DOM.a({href: "#", onClick:  function(e) { that.props.func(e, i.val.name); }}, "Ta bort" ));
+			return React.DOM.li({key:  i.key},  i.val.name, React.DOM.a({href: "#", onClick:  function(e) { that.props.func(e, i.key); }}, "Ta bort" ));
 		};
 		if(this.props.items !== undefined) {
 			return React.DOM.ul(null,  this.props.items.map(createItem) );
@@ -18924,11 +18924,13 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	removeCar: function(e, id) {
 	
 		console.log(id);
-		console.log(this.firebaseRef);
-	
+		
 		e.preventDefault();
 		var ref = new Firebase("https://blinding-torch-8626.firebaseio.com/cars/" + id);
 		ref.remove();
+		
+		delete this.cars[id];
+		this.forcedUpdate();
 	},
 	
 	handleSubmit: function(e) {
