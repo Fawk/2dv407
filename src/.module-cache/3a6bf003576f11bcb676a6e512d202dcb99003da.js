@@ -46,6 +46,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		this.fireBaseRef = new Firebase('https://blinding-torch-8626.firebaseio.com/cars');
 		this.fireBaseRef.on('value', function(snapshot) {
 			if(snapshot.val() !== null && typeof snapshot.val() === 'object') {
+				that.cars = [];
 				Object.keys(snapshot.val()).forEach(function(key) {
 					that.cars.push({ key: key, val: snapshot.val()[key] });
 				});
@@ -53,7 +54,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 			
 			that.setState({ cars: this.cars });
 			console.log("Loaded");
-			console.log(this.cars);
+			console.log(that.cars);
 		}).bind(this);
 	},
 	
