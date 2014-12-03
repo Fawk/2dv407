@@ -18900,10 +18900,9 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	componentWillMount: function() {
 		this.fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars");
 		this.fireBaseRef.on('value', function(snapshot) {
-			console.log(snapshot);
-			console.log(snapshot.name());
-			console.log(snapshot.val());
-			//this.cars[] = 
+			Object.keys(snapshot.val()).forEach(function(key) {
+				this.cars[key] = snapshot.val()[key];
+			});
 		});
 	},
 	
