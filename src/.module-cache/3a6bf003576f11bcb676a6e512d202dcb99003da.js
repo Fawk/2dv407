@@ -15,7 +15,7 @@ var CarList = React.createClass({
 		var createItem = function(i, k) {
 			return <li key={ i.key }>{ i.val.name }<a href='#' onClick={ function(e) { that.props.func(e, i.key); } }>{ "Ta bort" }</a></li>;
 		};
-		if(this.props.items !== undefined) {
+		if(this.props.items !== undefined || this.props.items.length == 0) {
 			return <ul>{ this.props.items.map(createItem) }</ul>;
 		} else {
 			return <ul>{ "Det fanns inga bilar!" }</ul>;
