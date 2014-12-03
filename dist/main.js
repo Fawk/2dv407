@@ -18899,7 +18899,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
   
 	componentWillMount: function() {
 		var that = this;
-		this.fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars");
+		this.fireBaseRef = new Firebase('https://blinding-torch-8626.firebaseio.com/cars');
 		this.fireBaseRef.on('value', function(snapshot) {
 			Object.keys(snapshot.val()).forEach(function(key) {
 				that.cars.push({ key: key, val: snapshot.val()[key] });
@@ -18926,7 +18926,8 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		console.log(id);
 		
 		e.preventDefault();
-		var ref = new Firebase("https://blinding-torch-8626.firebaseio.com/cars/" + id);
+		var ref = new Firebase('https://blinding-torch-8626.firebaseio.com/cars/' + id);
+		console.log(ref);
 		ref.remove();
 		
 		delete this.cars[id];
