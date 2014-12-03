@@ -18869,7 +18869,6 @@ var CarList = React.createClass({displayName: 'CarList',
   render: function() {
 		var that = this;
 		var createItem = function(i, k) {
-			console.log(i);
 			return React.DOM.li({key:  i.key},  i.val.name, React.DOM.a({href: "#", onClick:  function(e) { that.props.func(e, i); }}, "Ta bort" ));
 		};
 		if(this.props.items !== undefined) {
@@ -18938,20 +18937,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		  this.firebaseRef.push({ name: this.state.text, price: 1200 });
 		  this.setState({text: ""});
 		}
-    },
-	
-	/*setState: function(obj) {
-		Object.keys(obj).forEach(function(key) {
-			if(obj[key] !== null && obj[key] instanceof 'object') {
-				if(!this.state.hasOwnPropery(key))
-					this.state[key] = [];
-
-				this.state[key].push(obj[key]);
-			} else {
-				this.state[key] = obj[key];
-			}
-		});
-	}*/
+    }
   
 });
 
