@@ -66,16 +66,13 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	},
 	
 	removeCar: function(e, id) {
-	
-		console.log(id);
 		
 		e.preventDefault();
 		var ref = new Firebase('https://blinding-torch-8626.firebaseio.com/cars/' + id);
-		console.log(ref);
 		ref.remove();
 		
 		delete this.cars[id];
-		this.forcedUpdate();
+		this.forceUpdate();
 	},
 	
 	handleSubmit: function(e) {
