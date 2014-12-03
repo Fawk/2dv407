@@ -18882,6 +18882,7 @@ var CarList = React.createClass({displayName: 'CarList',
 var CarCRUD = React.createClass({displayName: 'CarCRUD',
 
 	firebaseRef: null,
+	cars: [],
 
 	render: function() {
 		return (React.DOM.div(null, 
@@ -18899,8 +18900,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	componentWillMount: function() {
 		this.fireBaseRef = new Firebase("https://blinding-torch-8626.firebaseio.com/cars");
 		this.fireBaseRef.on("value", function(snapshot) {
-			this.setState({ cars: { key: snapshot.key(), value: snapshot.val() }});
-			this.forceUpdate();
+			this.cars[snapshot.key()] = snapshot.val();
 		});
 	},
 	
