@@ -50,6 +50,8 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 				that.cars.push({ key: key, val: snapshot.val()[key] });
 			});
 		}).bind(this);
+		
+		this.setState({ cars: this.cars });
 	},
 	
 	onChange: function(e) {
