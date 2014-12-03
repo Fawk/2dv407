@@ -18885,7 +18885,7 @@ var CarList = React.createClass({displayName: 'CarList',
 var CarCRUD = React.createClass({displayName: 'CarCRUD',
 
 	firebaseRef: null,
-	cars: {},
+	cars: [],
 
 	render: function() {
 		return (React.DOM.div(null, 
