@@ -1,7 +1,8 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var Firebase = require("firebase");
+var Firebase = require('firebase');
+var $ = require('jquery')(window);
 
 var Message = React.createClass({displayName: 'Message',
 	render: function() {
@@ -14,8 +15,8 @@ var CarList = React.createClass({
 		var that = this;
 		var createItem = function(i, k) {
 			return (<li key={ i.key }>{ i.val.name }
-						<a href='#' onClick={ function(e) { that.props.del(e, i.key); } }>{ "Ta bort" }</a>
-						<a href='#' onClick={ function(e) { that.props.update(e, i.key); } }>{ "Ändra" }</a>
+						<a href='#' id={ i.key + '_delete' } onClick={ function(e) { that.props.del(e, i.key); } }>{ "Ta bort" }</a>
+						<a href='#' id={ i.key + '_update' } onClick={ function(e) { that.props.update(e, i.key); } }>{ "Ändra" }</a>
 					</li>);
 		};
 		if(this.props.items !== undefined && this.props.items.length != 0) {
@@ -109,6 +110,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		
 		e.preventDefault();
 		console.log(e.target);
+		console.log($("#" + $(e.target).attr("id")));
 		
 	},
 	
