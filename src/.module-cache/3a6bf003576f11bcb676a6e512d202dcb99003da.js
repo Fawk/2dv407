@@ -110,10 +110,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		
 		e.preventDefault();
 		console.log(e.target);
-		var window = jsdom.jsdom().parentWindow();
-		jsdom.jQueryify(window, "http://code.jquery.com/jquery.js", function() {
-			console.log(window.jQuery(e.target));
-		});
+		console.log(jsdom);
 		
 	},
 	
