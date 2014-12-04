@@ -2,7 +2,7 @@
 
 var React = require('react');
 var Firebase = require('firebase');
-var $ = require('jquery')(window);
+var jsdom = require('jsdom');
 
 var Message = React.createClass({displayName: 'Message',
 	render: function() {
@@ -110,7 +110,10 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		
 		e.preventDefault();
 		console.log(e.target);
-		console.log($(e.target));
+		var window = jsdom.jsdom().parentWindow();
+		jsdom.jQueryify(window, "http://code.jquery.com/jquery.js", function() {
+			console.log(window.jQuery(e.target));
+		});
 		
 	},
 	
