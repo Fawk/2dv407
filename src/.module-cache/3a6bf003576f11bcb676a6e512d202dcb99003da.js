@@ -34,9 +34,9 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	render: function() {
 		return (<div>
 			<Message value={ "Bilar redo att bokas:" } />
-			<CarList ref="carList" items={ this.cars } del={ this.removeCar } update={ this.triggerUpdate } />
+			<CarList items={ this.cars } del={ this.removeCar } update={ this.triggerUpdate } />
 			<div>
-				<form onSubmit={ this.addCar }>
+				<form ref="form" onSubmit={ this.addCar }>
 				  <input onChange={ this.onNameChange } value={ this.state.name } />
 				  <input onChange={ this.onPriceChange } value={ this.state.price } />
 				  <button>{ "Lägg till bil" }</button>

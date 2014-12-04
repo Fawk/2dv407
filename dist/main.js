@@ -18890,9 +18890,9 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	render: function() {
 		return (React.DOM.div(null, 
 			Message({value: "Bilar redo att bokas:" }), 
-			CarList({ref: "carList", items:  this.cars, del:  this.removeCar, update:  this.triggerUpdate}), 
+			CarList({items:  this.cars, del:  this.removeCar, update:  this.triggerUpdate}), 
 			React.DOM.div(null, 
-				React.DOM.form({onSubmit:  this.addCar}, 
+				React.DOM.form({ref: "form", onSubmit:  this.addCar}, 
 				  React.DOM.input({onChange:  this.onNameChange, value:  this.state.name}), 
 				  React.DOM.input({onChange:  this.onPriceChange, value:  this.state.price}), 
 				  React.DOM.button(null, "Lägg till bil" )
