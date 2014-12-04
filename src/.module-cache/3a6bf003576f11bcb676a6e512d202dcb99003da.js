@@ -110,7 +110,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		
 		e.preventDefault();
 		console.log(e.target);
-		console.log($("#" + $(e.target).attr("id")));
+		console.log($(e.target));
 		
 	},
 	
