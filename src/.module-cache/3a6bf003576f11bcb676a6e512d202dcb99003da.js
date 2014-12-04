@@ -13,7 +13,7 @@ var CarList = React.createClass({
   render: function() {
 		var that = this;
 		var createItem = function(i, k) {
-			return (<li ref='hej' key={ i.key }>{ i.val.name }
+			return (<li ref="hej" key={ i.key }>{ i.val.name }
 						<a href='#' onClick={ function(e) { that.props.del(e, i.key); } }>{ "Ta bort" }</a>
 						<a href='#' onClick={ function(e) { that.props.update(e, i.key); } }>{ "Ändra" }</a>
 					</li>);
