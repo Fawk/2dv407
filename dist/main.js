@@ -18869,7 +18869,13 @@ var CarList = React.createClass({displayName: 'CarList',
   render: function() {
 		var that = this;
 		var createItem = function(i, k) {
-			return React.DOM.li({key:  i.key},  i.val.name, React.DOM.a({href: "#", onClick:  function(e) { that.props.func(e, i.key); }}, "Ta bort" ));
+			return 
+			(
+				React.DOM.li({ref:  i.key, key:  i.key},  i.val.name, 
+					React.DOM.a({ref:  i.key + "_delete", href: "#", onClick:  function(e) { that.props.del(e, i.key); }}, "Ta bort" ), 
+					React.DOM.a({ref:  i.key + "_update", href: "#", onClick:  function(e) { that.props.update(e, i.key); }}, "Ändra" )
+				)
+			);
 		};
 		if(this.props.items !== undefined && this.props.items.length != 0) {
 			return React.DOM.ul(null,  this.props.items.map(createItem) );
@@ -18887,10 +18893,11 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	render: function() {
 		return (React.DOM.div(null, 
 			Message({value: "Bilar redo att bokas:" }), 
-			CarList({items:  this.cars, func:  this.removeCar}), 
+			CarList({items:  this.cars, del:  this.removeCar, update:  this.triggerUpdate}), 
 			React.DOM.div(null, 
-				React.DOM.form({onSubmit:  this.handleSubmit}, 
-				  React.DOM.input({onChange:  this.onChange, value:  this.state.text}), 
+				React.DOM.form({onSubmit:  this.addCar}, 
+				  React.DOM.input({onChange:  this.onNameChange, value:  this.state.name}), 
+				  React.DOM.input({onChange:  this.onPriceChange, value:  this.state.price}), 
 				  React.DOM.button(null, "Lägg till bil" )
 				)
 			)
@@ -18914,12 +18921,16 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		}).bind(this);
 	},
 	
-	onChange: function(e) {
-		this.setState({text: e.target.value});
+	onNameChange: function(e) {
+		this.setState({name: e.target.value});
+	},
+	
+	onPriceChange: function(e) {
+		this.setState({price: e.target.value});
 	},
 	
 	getInitialState: function() {
-		return {cars: [], text: ""};
+		return {cars: [], name: "", price: 0, updateName: "", updatePrice: 0};
 	},
 	
 	getCar: function(id) {
@@ -18942,15 +18953,33 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		console.log(this.cars);
 	},
 	
-	handleSubmit: function(e) {
+	addCar: function(e) {
+	
 		e.preventDefault();
-		if (this.state.text && this.state.text.trim().length !== 0) {
-		  this.fireBaseRef.push({ name: this.state.text, price: 1200 });
-		  this.setState({text: ""});
+		if ((this.state.name && this.state.name.trim().length !== 0) && (this.state.price && this.state.price.trim().length !== 0)) {
+			this.fireBaseRef.push({ name: this.state.name, price: this.state.price, booked: false });
+			this.setState({text: "",price:0});
 			console.log("addCar");
 			console.log(this.cars);
 		}
-    }
+    },
+	
+	triggerUpdate: function(e, id) {
+		
+		e.preventDefault();
+		console.log(this.refs);
+		
+	},
+	
+	updateCar: function(e, id) {
+		
+		if ((this.state.updateName && this.state.updateName.trim().length !== 0) && (this.state.updatePrice && this.state.updatePrice.trim().length !== 0)) {
+			this.fireBaseRef.child(id).set({ name: this.state.updateName, price: this.state.updatePrice });
+			this.setState({text: "",price:0});
+			console.log("updateCar");
+			console.log(this.cars);
+		}
+	}
   
 });
 
