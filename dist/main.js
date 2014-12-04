@@ -18869,7 +18869,7 @@ var CarList = React.createClass({displayName: 'CarList',
   render: function() {
 		var that = this;
 		var createItem = function(i, k) {
-			return (React.DOM.li({ref: "hej", key:  i.key},  i.val.name, 
+			return (React.DOM.li({key:  i.key},  i.val.name, 
 						React.DOM.a({href: "#", onClick:  function(e) { that.props.del(e, i.key); }}, "Ta bort" ), 
 						React.DOM.a({href: "#", onClick:  function(e) { that.props.update(e, i.key); }}, "Ändra" )
 					));
@@ -18890,7 +18890,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	render: function() {
 		return (React.DOM.div(null, 
 			Message({value: "Bilar redo att bokas:" }), 
-			CarList({items:  this.cars, del:  this.removeCar, update:  this.triggerUpdate}), 
+			CarList({ref: "carList", items:  this.cars, del:  this.removeCar, update:  this.triggerUpdate}), 
 			React.DOM.div(null, 
 				React.DOM.form({onSubmit:  this.addCar}, 
 				  React.DOM.input({onChange:  this.onNameChange, value:  this.state.name}), 
