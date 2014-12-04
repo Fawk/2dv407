@@ -13,10 +13,10 @@ var CarList = React.createClass({
   render: function() {
 		var that = this;
 		var createItem = function(i, k) {
-			return (<li key={ i.key }>{ i.val.name }
-						<a ref={ i.key + '_delete' } href='#' onClick={ function(e) { that.props.del(e, i.key); } }>{ "Ta bort" }</a>
-						<a ref={ i.key + '_update' } href='#' onClick={ function(e) { that.props.update(e, i.key); } }>{ "Ändra" }</a>
-					</li>);
+			return React.addons.cloneWithProps((<li key={ i.key }>{ i.val.name }
+						<a href='#' onClick={ function(e) { that.props.del(e, i.key); } }>{ "Ta bort" }</a>
+						<a href='#' onClick={ function(e) { that.props.update(e, i.key); } }>{ "Ändra" }</a>
+					</li>), { ref: i.key + '_delete' });
 		};
 		if(this.props.items !== undefined && this.props.items.length != 0) {
 			return <ul>{ this.props.items.map(createItem) }</ul>;
