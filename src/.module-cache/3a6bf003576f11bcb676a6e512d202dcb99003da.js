@@ -14,8 +14,8 @@ var CarList = React.createClass({
 		var that = this;
 		var createItem = function(i, k) {
 			return (<li key={ i.key }>{ i.val.name }
-						<a ref={ i.key + "_delete" } href='#' onClick={ function(e) { that.props.del(e, i.key); } }>{ "Ta bort" }</a>
-						<a ref={ i.key + "_update" } href='#' onClick={ function(e) { that.props.update(e, i.key); } }>{ "Ändra" }</a>
+						<a ref={ i.key + '_delete' } href='#' onClick={ function(e) { that.props.del(e, i.key); } }>{ "Ta bort" }</a>
+						<a ref={ i.key + '_update' } href='#' onClick={ function(e) { that.props.update(e, i.key); } }>{ "Ändra" }</a>
 					</li>);
 		};
 		if(this.props.items !== undefined && this.props.items.length != 0) {

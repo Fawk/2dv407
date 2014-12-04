@@ -18870,8 +18870,8 @@ var CarList = React.createClass({displayName: 'CarList',
 		var that = this;
 		var createItem = function(i, k) {
 			return (React.DOM.li({key:  i.key},  i.val.name, 
-						React.DOM.a({ref:  i.key + "_delete", href: "#", onClick:  function(e) { that.props.del(e, i.key); }}, "Ta bort" ), 
-						React.DOM.a({ref:  i.key + "_update", href: "#", onClick:  function(e) { that.props.update(e, i.key); }}, "Ändra" )
+						React.DOM.a({ref:  i.key + '_delete', href: "#", onClick:  function(e) { that.props.del(e, i.key); }}, "Ta bort" ), 
+						React.DOM.a({ref:  i.key + '_update', href: "#", onClick:  function(e) { that.props.update(e, i.key); }}, "Ändra" )
 					));
 		};
 		if(this.props.items !== undefined && this.props.items.length != 0) {
