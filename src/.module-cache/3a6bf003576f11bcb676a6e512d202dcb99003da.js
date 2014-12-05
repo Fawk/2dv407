@@ -2,7 +2,6 @@
 
 var React = require('react');
 var Firebase = require('firebase');
-var jsdom = require('jsdom');
 
 var Message = React.createClass({displayName: 'Message',
 	render: function() {
@@ -14,9 +13,9 @@ var CarList = React.createClass({
   render: function() {
 		var that = this;
 		var createItem = function(i, k) {
-			return (<li key={ i.key }>{ i.val.name }
-						<a href='#' id={ i.key + '_delete' } onClick={ function(e) { that.props.del(e, i.key); } }>{ "Ta bort" }</a>
-						<a href='#' id={ i.key + '_update' } onClick={ function(e) { that.props.update(e, i.key); } }>{ "Ändra" }</a>
+			return (<li id={ i.key } key={ i.key }>{ i.val.name }
+						<a href='#' onClick={ that.props.del }>{ "Ta bort" }</a>
+						<a href='#' onClick={ that.props.update }>{ "Ändra" }</a>
 					</li>);
 		};
 		if(this.props.items !== undefined && this.props.items.length != 0) {
@@ -79,7 +78,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		return this.state.cars[id];
 	},
 	
-	removeCar: function(e, id) {
+	removeCar: function(e) {
 		
 		e.preventDefault();
 		this.fireBaseRef.child(id).remove();
@@ -106,15 +105,17 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		}
     },
 	
-	triggerUpdate: function(e, id) {
+	triggerUpdate: function(e) {
 		
 		e.preventDefault();
-		console.log(e.target);
-		console.log(jsdom);
+		console.log(e.target);	
 		
+		var el = document.getElementById(e.target.parentNode.id);
+		el.childNodes[0].style.display = 'none';
+		el.childNodes[1].style.display = 'none';
 	},
 	
-	updateCar: function(e, id) {
+	updateCar: function(id) {
 		
 		if ((this.state.updateName && this.state.updateName.trim().length !== 0) && (this.state.updatePrice && this.state.updatePrice.trim().length !== 0)) {
 			this.fireBaseRef.child(id).set({ name: this.state.updateName, price: this.state.updatePrice });
