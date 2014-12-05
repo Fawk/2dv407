@@ -18873,8 +18873,8 @@ var CarList = React.createClass({displayName: 'CarList',
 					
 					return (React.DOM.li({key:  i.key}, 				
 								React.DOM.form({onSubmit:  that.props.ucar}, 
-									React.DOM.input({onChange:  that.props.uname, value:  that.state.updateName}), 
-									React.DOM.input({onChange:  that.props.uprice, value:  that.state.updatePrice}), 
+									React.DOM.input({onChange:  that.props.uname, value:  that.props.crud.state.updateName}), 
+									React.DOM.input({onChange:  that.props.uprice, value:  that.props.crud.state.updatePrice}), 
 									React.DOM.button(null, "Ändra bil" )
 								)
 							));
