@@ -18869,10 +18869,23 @@ var CarList = React.createClass({displayName: 'CarList',
   render: function() {
 		var that = this;
 		var createItem = function(i, k) {
-			return (React.DOM.li({id:  i.key, key:  i.key},  i.val.name, 
-						React.DOM.a({href: "#", onClick:  that.props.del}, "Ta bort" ), 
-						React.DOM.a({href: "#", onClick:  that.props.update}, "Ändra" )
-					));
+				if(that.state.isUpdating && (i.key == that.state.updateTargetKey)) {
+					
+					return (React.DOM.li({key:  i.key}, 				
+								React.DOM.form({onSubmit:  that.props.ucar}, 
+									React.DOM.input({onChange:  that.props.uname, value:  that.state.updateName}), 
+									React.DOM.input({onChange:  that.props.uprice, value:  that.state.updatePrice}), 
+									React.DOM.button(null, "Ändra bil" )
+								)
+							));
+				
+				} else {
+				
+					return (React.DOM.li({key:  i.key},  i.val.name, 
+								React.DOM.a({href: "#", onClick:  that.props.del}, "Ta bort" ), 
+								React.DOM.a({id:  i.key, href: "#", onClick:  that.props.update}, "Ändra" )
+							));
+				}
 		};
 		if(this.props.items !== undefined && this.props.items.length != 0) {
 			return React.DOM.ul(null,  this.props.items.map(createItem) );
@@ -18890,7 +18903,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	render: function() {
 		return (React.DOM.div(null, 
 			Message({value: "Bilar redo att bokas:" }), 
-			CarList({items:  this.cars, del:  this.removeCar, update:  this.triggerUpdate}), 
+			CarList({items:  this.cars, del:  this.removeCar, update:  this.triggerUpdate, ucar:  this.updateCar, uname:  this.onUpdateNameChange, uprice:  this.onUpdatePriceChange}), 
 			React.DOM.div(null, 
 				React.DOM.form({onSubmit:  this.addCar}, 
 				  React.DOM.input({onChange:  this.onNameChange, value:  this.state.name}), 
@@ -18926,8 +18939,17 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		this.setState({price: e.target.value});
 	},
 	
+	onUpdateNameChange: function(e) {
+		this.setState({updateName: e.target.value});
+	},
+	
+	onUpdatePriceChange: function(e) {
+		this.setState({updatePrice: e.target.value});
+	},
+	
+	
 	getInitialState: function() {
-		return {cars: [], name: "", price: 0, updateName: "", updatePrice: 0};
+		return {cars: [], name: "", price: 0, updateName: "", updatePrice: 0, isUpdating: false, updateTargetKey: 0};
 	},
 	
 	getCar: function(id) {
@@ -18962,13 +18984,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
     },
 	
 	triggerUpdate: function(e) {
-		
-		e.preventDefault();
-		console.log(e.target);	
-		
-		var el = document.getElementById(e.target.parentNode.id);
-		el.childNodes[0].style.display = 'none';
-		el.childNodes[1].style.display = 'none';
+		this.setState({ isUpdating: true, updateTargetKey: e.target.id });
 	},
 	
 	updateCar: function(id) {
