@@ -13,7 +13,7 @@ var CarList = React.createClass({
   render: function() {
 		var that = this;
 		var createItem = function(i, k) {
-				if(that.state.isUpdating && (i.key == that.state.updateTargetKey)) {
+				if(that.props.crud.state.isUpdating && (i.key == that.props.crud.state.updateTargetKey)) {
 					
 					return (<li key={ i.key }>				
 								<form onSubmit={ that.props.ucar }>
@@ -47,7 +47,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 	render: function() {
 		return (<div>
 			<Message value={ "Bilar redo att bokas:" } />
-			<CarList items={ this.cars } del={ this.removeCar } update={ this.triggerUpdate } ucar={ this.updateCar } uname={ this.onUpdateNameChange } uprice={ this.onUpdatePriceChange } />
+			<CarList items={ this.cars } del={ this.removeCar } update={ this.triggerUpdate } ucar={ this.updateCar } uname={ this.onUpdateNameChange } uprice={ this.onUpdatePriceChange } crud={ this } />
 			<div>
 				<form onSubmit={ this.addCar }>
 				  <input onChange={ this.onNameChange } value={ this.state.name } />
