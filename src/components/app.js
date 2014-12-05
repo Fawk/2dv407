@@ -26,8 +26,8 @@ var CarList = React.createClass({
 				} else {
 				
 					return (<li key={ i.key }>{ i.val.name }
-								<a href='#' onClick={ that.props.del }>{ "Ta bort" }</a>
-								<a id={ i.key } href='#' onClick={ that.props.update }>{ "Ändra" }</a>
+								<a href='#' onClick={ function(e) { that.props.del(e, i.key) } }>{ "Ta bort" }</a>
+								<a id={ i.key } href='#' onClick={ function(e) { that.props.update(e, i.val) } }>{ "Ändra" }</a>
 							</li>);
 				}
 		};
@@ -100,7 +100,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		return this.state.cars[id];
 	},
 	
-	removeCar: function(e) {
+	removeCar: function(e, id) {
 		
 		e.preventDefault();
 		this.fireBaseRef.child(id).remove();
@@ -127,8 +127,8 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		}
     },
 	
-	triggerUpdate: function(e) {
-		this.setState({ isUpdating: true, updateTargetKey: e.target.id });
+	triggerUpdate: function(e, obj) {
+		this.setState({ isUpdating: true, updateTargetKey: e.target.id, updateName: obj.name, updatePrice: obj.price });
 	},
 	
 	updateCar: function(id) {
