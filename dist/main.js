@@ -18987,7 +18987,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 		this.setState({ isUpdating: true, updateTargetKey: e.target.id, updateName: obj.name, updatePrice: obj.price });
 	},
 	
-	updateCar: function(id) {
+	updateCar: function(e, id) {
 		
 		if ((this.state.updateName && this.state.updateName.trim().length !== 0) && (this.state.updatePrice && this.state.updatePrice.trim().length !== 0)) {
 			this.fireBaseRef.child(id).set({ name: this.state.updateName, price: this.state.updatePrice });
