@@ -18872,7 +18872,7 @@ var CarList = React.createClass({displayName: 'CarList',
 				if(that.props.crud.state.isUpdating && (i.key == that.props.crud.state.updateTargetKey)) {
 					
 					return (React.DOM.li({key:  i.key}, 				
-								React.DOM.form({onSubmit:  that.props.ucar}, 
+								React.DOM.form({onSubmit:  function(e) { that.props.ucar(e, i.key) }}, 
 									React.DOM.input({onChange:  that.props.uname, value:  that.props.crud.state.updateName}), 
 									React.DOM.input({onChange:  that.props.uprice, value:  that.props.crud.state.updatePrice}), 
 									React.DOM.button(null, "Ändra bil" )

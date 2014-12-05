@@ -16,7 +16,7 @@ var CarList = React.createClass({
 				if(that.props.crud.state.isUpdating && (i.key == that.props.crud.state.updateTargetKey)) {
 					
 					return (<li key={ i.key }>				
-								<form onSubmit={ that.props.ucar }>
+								<form onSubmit={ function(e) { that.props.ucar(e, i.key) } }>
 									<input onChange={ that.props.uname } value={ that.props.crud.state.updateName } />
 									<input onChange={ that.props.uprice } value={ that.props.crud.state.updatePrice } />
 									<button>{ "Ändra bil" }</button>
