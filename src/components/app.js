@@ -43,6 +43,7 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 
 	fireBaseRef: null,
 	cars: [],
+	mixins: [React.addons.LinkedStateMixin],
 
 	render: function() {
 		return (<div>
@@ -50,8 +51,8 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 			<CarList items={ this.cars } del={ this.removeCar } update={ this.triggerUpdate } ucar={ this.updateCar } uname={ this.onUpdateNameChange } uprice={ this.onUpdatePriceChange } crud={ this } />
 			<div>
 				<form onSubmit={ this.addCar }>
-				  <input onChange={ this.onNameChange } value={ this.state.name } />
-				  <input onChange={ this.onPriceChange } value={ this.state.price } />
+				  <input valueLink={this.linkState('name')} />
+				  <input valueLink={this.linkState('price')} />
 				  <button>{ "Lägg till bil" }</button>
 				</form>
 			</div>
@@ -73,14 +74,6 @@ var CarCRUD = React.createClass({displayName: 'CarCRUD',
 			console.log("Loaded");
 			console.log(that.cars);
 		}).bind(this);
-	},
-	
-	onNameChange: function(e) {
-		this.setState({name: e.target.value});
-	},
-	
-	onPriceChange: function(e) {
-		this.setState({price: e.target.value});
 	},
 	
 	onUpdateNameChange: function(e) {
