@@ -1,0 +1,23 @@
+.search_options {
+    padding:10px;
+}
+
+.action {
+    display:inline;
+    border:1px solid #777;
+    color:#555;
+    padding:3px;
+    margin:0 5px 0 5px;
+}
+
+.action:hover {
+    cursor:pointer;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+}
+
+#addForm input {
+	margin:3px 3px 3px 5px;
+	padding:5px;
+}

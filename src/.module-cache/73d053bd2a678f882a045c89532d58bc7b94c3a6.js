@@ -1,8 +1,8 @@
 /** @jsx React.DOM */
 
-var CarCRUD = require('./components/app'),
+var VehicleCRUD = require('./components/app'),
     React = require('react');
 
 React.renderComponent(
-  <CarCRUD />,
+  <VehicleCRUD />,
   document.getElementById('main'));
