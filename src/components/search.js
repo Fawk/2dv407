@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+/* global $ */
 
 var React = require('react/addons');
 var _ = require('underscore');
@@ -12,12 +13,12 @@ var SearchResult = React.createClass({ displayName: 'SearchResult',
 			return <div><span><b>{ this.props.crud.template[key].name }</b>{ ": " + v }</span></div>;
 		}.bind(this);
 	
-		var createItem = function(obj, key) {
+		var createItem = function(obj) {
 		
 			if(obj.match) {
 				return (
 					<li data-status="closed" className="list-group-item" key={ obj.match.key }>
-						<a id={ obj.match.key } href='#' onClick={ function(e) { this.props.crud.bookObject(e, obj.match) }.bind(this) }>{ "Boka" }</a>
+						<a id={ obj.match.key } href='#' onClick={ function(e) { this.props.crud.bookObject(e, obj.match); }.bind(this) }>{ "Boka" }</a>
 						<span className="trigger">{ obj.match.val.name }</span>
 						<div className="extended">
 							{ _.map(obj.match.val, extending) }
@@ -76,7 +77,7 @@ var Search = React.createClass({ displayName: 'Search',
 							<div>
 								{ this.props.template[key].name }
 								<div className="search_options"><span className="f">Från </span>
-									<input key={ key + "_search_from" } placeholder={ this.options[key].lowest } ref={ key + "_search_from" } className="from" type="number" min="0" max={ this.options[key].highest+1 } valueLink={ this.linkState(key + "_search_from") } className="from" />
+									<input key={ key + "_search_from" } placeholder={ this.options[key].lowest } ref={ key + "_search_from" } className="from" type="number" min="0" max={ this.options[key].highest+1 } valueLink={ this.linkState(key + "_search_from") } />
 									<div className="action" data-type="0">&nbsp;&rarr;&nbsp;</div>
 									<input key={ key + "_search_to" } placeholder={ this.options[key].highest } ref={ key + "_search_to" } type="number" min="0" max={ this.options[key].highest+1 } valueLink={ this.linkState(key + "_search_to") } className="to" />
 									<span className="t"> Till</span>
@@ -125,15 +126,16 @@ var Search = React.createClass({ displayName: 'Search',
 	componentDidMount: function() {
 
 		var self = this;
-		$("body").on("click", ".action", function(e) {
+		$("body").on("click", ".action", function() {
+		
 			var i = parseInt($(this).attr("data-type"));
 			i++;
-			if(i == self.numberStates.length) {
+			if(i === self.numberStates.length) {
 				i = 0;
 			}
-			if(i == 1 || i == 2) {
+			if(i === 1 || i === 2) {
 				$(this).parent().find(".to").hide();
-				if(i == 1) {
+				if(i === 1) {
 					$(this).parent().find(".f").text("Mindre än ");
 				} else {
 					$(this).parent().find(".f").text("Större än ");
@@ -163,7 +165,7 @@ var Search = React.createClass({ displayName: 'Search',
 		var then = new Date().getTime();
 		console.log("Search initiated");
 
-		_.each(this.props.data, function(v, k) {
+		_.each(this.props.data, function(v) {
 			var matchResult = this.matchesSearch(v);
 			if(matchResult.isMatch && !this.stopSearch) {
 				var obj = { 
@@ -213,7 +215,7 @@ var Search = React.createClass({ displayName: 'Search',
 								numRanges[rk] = {};
 							}
 							
-							if(fk == "from" && !(tk in this.state)) {
+							if(fk === "from" && !(tk in this.state)) {
 							
 								numRanges[rk][this.numberStates[parseInt(jnode.parent().find(".action").attr("data-type"))].name] = true;
 								numRanges[rk][fk] = parseInt(value);
@@ -221,7 +223,7 @@ var Search = React.createClass({ displayName: 'Search',
 								
 							} else {
 
-								if(fk == "to" && (parseInt(value) < numRanges[rk].from)) {
+								if(fk === "to" && (parseInt(value) < numRanges[rk].from)) {
 									this.stopSearch = true;
 									this.errors[rk] = "Till kan inte vara lägre än från!";
 									this.setState({ hasError: true });
@@ -255,19 +257,19 @@ var Search = React.createClass({ displayName: 'Search',
 
 				_.each(numRanges, function(v, k) {
 				
-					var n = parseInt(val)
+					var n = parseInt(val);
 					if(v.less) {
-						if(n < v.from && k == key) {
+						if(n < v.from && k === key) {
 							s++;
 							o[key] = n + " < " + v.from + " == true";
 						}
 					} else if(v.more) {
-						if(n > v.from && k == key) {
+						if(n > v.from && k === key) {
 							s++;
 							o[key] = n + " > " + v.from + " == true";
 						}
 					} else {
-						if((n <= v.to && n >= v.from) && k == key) {
+						if((n <= v.to && n >= v.from) && k === key) {
 							s+=2;
 							o[key] = v.from + " >= " + n + " <= " + v.to + " == true";
 						}
@@ -300,7 +302,9 @@ var Search = React.createClass({ displayName: 'Search',
 		}, this);
 		
 		result.matchedTowards = o;		
-		if(s == goal) result.isMatch = true;
+		if(s === goal) {
+			result.isMatch = true;
+		}
 		return result;
 	},
 	
@@ -312,7 +316,7 @@ var Search = React.createClass({ displayName: 'Search',
 		
 		var options = {};
 
-		_.each(this.props.data, function(v, k) {
+		_.each(this.props.data, function(v) {
 		
 			_.each(this.props.template, function(pv, pk) {
 			

@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+/* global $ */
 
 var React = require('react/addons');
 var Firebase = require('firebase');
@@ -70,7 +71,7 @@ var VehicleList = React.createClass({
 							);
 				}
 		};
-		if(c.vehicles !== undefined && c.vehicles.length != 0) {
+		if(c.vehicles !== undefined && c.vehicles.length !== 0) {
 			return <ul className="list-group" id="listr">{ c.vehicles.map(createItem) }</ul>;
 		} else {
 			return <ul>{ "Det fanns inga bilar att boka!" }</ul>;
@@ -320,7 +321,6 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 				case "string": o[key] = ""; break;
 				case "number": o[key] = 0; break;
 				case "boolean": o[key] = false; break;
-				default: "";
 			}
 		}, this);
 		this.setState(o);

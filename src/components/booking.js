@@ -11,13 +11,13 @@ module.exports = React.createClass({ displayName: "BookingClass",
 	mixins: [React.addons.LinkedStateMixin],
 	render: function() {
 
-		var bookedList = function(value, key) {
-		
+		var bookedList = function(value) {
+			
 			console.log(value);
 		
 			return (
 				<li data-status="closed" className="list-group-item">
-					<a id={ value.val.booked.key } href='#' onClick={ function(e) { this.removeBooked(value.val.booked); this.props.crud.unbookObject(e, value.val.booked) }.bind(this) }>{ "Avboka" }</a>
+					<a id={ value.val.booked.key } href='#' onClick={ function(e) { this.removeBooked(value.val.booked); this.props.crud.unbookObject(e, value.val.booked); }.bind(this) }>{ "Avboka" }</a>
 					<div className="trigger">{ "Bokad av: " + value.val.booker }</div>
 					<div className="extended">
 						{ _.map(value.val.booked.val, extending) }
@@ -31,6 +31,8 @@ module.exports = React.createClass({ displayName: "BookingClass",
 			var v = typeof value === "boolean" ? value === true ? "Ja" : "Nej" : value;
 			return <div><span><b>{ this.props.template[key].name }</b>{ ": " + v }</span></div>;
 		}.bind(this);
+		
+		var a = function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList); } else { return "Inget är bokat!"; } }.bind(this);
 
 		if(this.props.obj !== undefined) {
 		
@@ -39,7 +41,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 				<div className="scroll">
 					<div className="hits">Bokade:</div>
 					<ul className="list-group">
-						{ (function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList) } else { return "Inget är bokat!" } }.bind(this))() }
+						{ a }
 					</ul>
 				</div>
 				<div className="booking">
@@ -56,7 +58,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 					</div>
 				</div>
 				
-				<form onSubmit={ function(e) { this.bookObj(e, this.props.obj) }.bind(this) } id="bookForm">
+				<form onSubmit={ function(e) { this.bookObj(e, this.props.obj); }.bind(this) } id="bookForm">
 					<div className="booker_info">
 						<span className="smalltitle">{ "Bokningsinfo:" }</span>
 						<input placeholder="Namn" key={ "booker_name" } required valueLink={ this.linkState("booker_name") } />
@@ -66,7 +68,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 				</form>
 			</div>
 			);
-		} else {
+		} else {	
 		
 			return (
 				<div>
@@ -74,7 +76,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 						<div className="booked">
 							<div className="hits">Bokade:</div>
 							<ul className="list-group" id="listb1">
-								{ (function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList) } else { return "Inget är bokat!" } }.bind(this))() }
+								{ a }
 							</ul>
 						</div>
 					</div>
@@ -125,7 +127,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 		var found = false;
 		_.each(this.booked, function(value, key) {
 			if(!found) {
-				if(value.val.booked.key == obj.key) {
+				if(value.val.booked.key === obj.key) {
 					found = true;
 					this.booked.splice( key, 1 );
 				}

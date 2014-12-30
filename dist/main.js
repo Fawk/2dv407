@@ -22077,6 +22077,7 @@ module.exports = require('./lib/React');
 
 },{}],164:[function(require,module,exports){
 /** @jsx React.DOM */
+/* global $ */
 
 var React = require('react/addons');
 var Firebase = require('firebase');
@@ -22148,7 +22149,7 @@ var VehicleList = React.createClass({displayName: 'VehicleList',
 							);
 				}
 		};
-		if(c.vehicles !== undefined && c.vehicles.length != 0) {
+		if(c.vehicles !== undefined && c.vehicles.length !== 0) {
 			return React.DOM.ul({className: "list-group", id: "listr"},  c.vehicles.map(createItem) );
 		} else {
 			return React.DOM.ul(null, "Det fanns inga bilar att boka!" );
@@ -22398,7 +22399,6 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 				case "string": o[key] = ""; break;
 				case "number": o[key] = 0; break;
 				case "boolean": o[key] = false; break;
-				default: "";
 			}
 		}, this);
 		this.setState(o);
@@ -22421,13 +22421,13 @@ module.exports = React.createClass({ displayName: "BookingClass",
 	mixins: [React.addons.LinkedStateMixin],
 	render: function() {
 
-		var bookedList = function(value, key) {
-		
+		var bookedList = function(value) {
+			
 			console.log(value);
 		
 			return (
 				React.DOM.li({'data-status': "closed", className: "list-group-item"}, 
-					React.DOM.a({id:  value.val.booked.key, href: "#", onClick:  function(e) { this.removeBooked(value.val.booked); this.props.crud.unbookObject(e, value.val.booked) }.bind(this) }, "Avboka" ), 
+					React.DOM.a({id:  value.val.booked.key, href: "#", onClick:  function(e) { this.removeBooked(value.val.booked); this.props.crud.unbookObject(e, value.val.booked); }.bind(this) }, "Avboka" ), 
 					React.DOM.div({className: "trigger"},  "Bokad av: " + value.val.booker), 
 					React.DOM.div({className: "extended"}, 
 						 _.map(value.val.booked.val, extending) 
@@ -22441,6 +22441,8 @@ module.exports = React.createClass({ displayName: "BookingClass",
 			var v = typeof value === "boolean" ? value === true ? "Ja" : "Nej" : value;
 			return React.DOM.div(null, React.DOM.span(null, React.DOM.b(null,  this.props.template[key].name),  ": " + v));
 		}.bind(this);
+		
+		var a = function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList); } else { return "Inget är bokat!"; } }.bind(this);
 
 		if(this.props.obj !== undefined) {
 		
@@ -22449,7 +22451,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 				React.DOM.div({className: "scroll"}, 
 					React.DOM.div({className: "hits"}, "Bokade:"), 
 					React.DOM.ul({className: "list-group"}, 
-						 (function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList) } else { return "Inget är bokat!" } }.bind(this))() 
+						a 
 					)
 				), 
 				React.DOM.div({className: "booking"}, 
@@ -22466,7 +22468,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 					)
 				), 
 				
-				React.DOM.form({onSubmit:  function(e) { this.bookObj(e, this.props.obj) }.bind(this), id: "bookForm"}, 
+				React.DOM.form({onSubmit:  function(e) { this.bookObj(e, this.props.obj); }.bind(this), id: "bookForm"}, 
 					React.DOM.div({className: "booker_info"}, 
 						React.DOM.span({className: "smalltitle"}, "Bokningsinfo:" ), 
 						React.DOM.input({placeholder: "Namn", key: "booker_name", required: true, valueLink:  this.linkState("booker_name") }), 
@@ -22476,7 +22478,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 				)
 			)
 			);
-		} else {
+		} else {	
 		
 			return (
 				React.DOM.div(null, 
@@ -22484,7 +22486,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 						React.DOM.div({className: "booked"}, 
 							React.DOM.div({className: "hits"}, "Bokade:"), 
 							React.DOM.ul({className: "list-group", id: "listb1"}, 
-								 (function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList) } else { return "Inget är bokat!" } }.bind(this))() 
+								a 
 							)
 						)
 					)
@@ -22535,7 +22537,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 		var found = false;
 		_.each(this.booked, function(value, key) {
 			if(!found) {
-				if(value.val.booked.key == obj.key) {
+				if(value.val.booked.key === obj.key) {
 					found = true;
 					this.booked.splice( key, 1 );
 				}
@@ -22547,6 +22549,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 	
 },{"firebase":1,"react/addons":3,"underscore":163}],166:[function(require,module,exports){
 /** @jsx React.DOM */
+/* global $ */
 
 var React = require('react/addons');
 var _ = require('underscore');
@@ -22560,12 +22563,12 @@ var SearchResult = React.createClass({ displayName: 'SearchResult',
 			return React.DOM.div(null, React.DOM.span(null, React.DOM.b(null,  this.props.crud.template[key].name),  ": " + v));
 		}.bind(this);
 	
-		var createItem = function(obj, key) {
+		var createItem = function(obj) {
 		
 			if(obj.match) {
 				return (
 					React.DOM.li({'data-status': "closed", className: "list-group-item", key:  obj.match.key}, 
-						React.DOM.a({id:  obj.match.key, href: "#", onClick:  function(e) { this.props.crud.bookObject(e, obj.match) }.bind(this) }, "Boka" ), 
+						React.DOM.a({id:  obj.match.key, href: "#", onClick:  function(e) { this.props.crud.bookObject(e, obj.match); }.bind(this) }, "Boka" ), 
 						React.DOM.span({className: "trigger"},  obj.match.val.name), 
 						React.DOM.div({className: "extended"}, 
 							 _.map(obj.match.val, extending) 
@@ -22624,7 +22627,7 @@ var Search = React.createClass({ displayName: 'Search',
 							React.DOM.div(null, 
 								 this.props.template[key].name, 
 								React.DOM.div({className: "search_options"}, React.DOM.span({className: "f"}, "Från "), 
-									React.DOM.input({key:  key + "_search_from", placeholder:  this.options[key].lowest, ref:  key + "_search_from", className: "from", type: "number", min: "0", max:  this.options[key].highest+1, valueLink:  this.linkState(key + "_search_from"), className: "from"}), 
+									React.DOM.input({key:  key + "_search_from", placeholder:  this.options[key].lowest, ref:  key + "_search_from", className: "from", type: "number", min: "0", max:  this.options[key].highest+1, valueLink:  this.linkState(key + "_search_from") }), 
 									React.DOM.div({className: "action", 'data-type': "0"}, " → "), 
 									React.DOM.input({key:  key + "_search_to", placeholder:  this.options[key].highest, ref:  key + "_search_to", type: "number", min: "0", max:  this.options[key].highest+1, valueLink:  this.linkState(key + "_search_to"), className: "to"}), 
 									React.DOM.span({className: "t"}, " Till"), 
@@ -22673,15 +22676,16 @@ var Search = React.createClass({ displayName: 'Search',
 	componentDidMount: function() {
 
 		var self = this;
-		$("body").on("click", ".action", function(e) {
+		$("body").on("click", ".action", function() {
+		
 			var i = parseInt($(this).attr("data-type"));
 			i++;
-			if(i == self.numberStates.length) {
+			if(i === self.numberStates.length) {
 				i = 0;
 			}
-			if(i == 1 || i == 2) {
+			if(i === 1 || i === 2) {
 				$(this).parent().find(".to").hide();
-				if(i == 1) {
+				if(i === 1) {
 					$(this).parent().find(".f").text("Mindre än ");
 				} else {
 					$(this).parent().find(".f").text("Större än ");
@@ -22711,7 +22715,7 @@ var Search = React.createClass({ displayName: 'Search',
 		var then = new Date().getTime();
 		console.log("Search initiated");
 
-		_.each(this.props.data, function(v, k) {
+		_.each(this.props.data, function(v) {
 			var matchResult = this.matchesSearch(v);
 			if(matchResult.isMatch && !this.stopSearch) {
 				var obj = { 
@@ -22761,7 +22765,7 @@ var Search = React.createClass({ displayName: 'Search',
 								numRanges[rk] = {};
 							}
 							
-							if(fk == "from" && !(tk in this.state)) {
+							if(fk === "from" && !(tk in this.state)) {
 							
 								numRanges[rk][this.numberStates[parseInt(jnode.parent().find(".action").attr("data-type"))].name] = true;
 								numRanges[rk][fk] = parseInt(value);
@@ -22769,7 +22773,7 @@ var Search = React.createClass({ displayName: 'Search',
 								
 							} else {
 
-								if(fk == "to" && (parseInt(value) < numRanges[rk].from)) {
+								if(fk === "to" && (parseInt(value) < numRanges[rk].from)) {
 									this.stopSearch = true;
 									this.errors[rk] = "Till kan inte vara lägre än från!";
 									this.setState({ hasError: true });
@@ -22803,19 +22807,19 @@ var Search = React.createClass({ displayName: 'Search',
 
 				_.each(numRanges, function(v, k) {
 				
-					var n = parseInt(val)
+					var n = parseInt(val);
 					if(v.less) {
-						if(n < v.from && k == key) {
+						if(n < v.from && k === key) {
 							s++;
 							o[key] = n + " < " + v.from + " == true";
 						}
 					} else if(v.more) {
-						if(n > v.from && k == key) {
+						if(n > v.from && k === key) {
 							s++;
 							o[key] = n + " > " + v.from + " == true";
 						}
 					} else {
-						if((n <= v.to && n >= v.from) && k == key) {
+						if((n <= v.to && n >= v.from) && k === key) {
 							s+=2;
 							o[key] = v.from + " >= " + n + " <= " + v.to + " == true";
 						}
@@ -22848,7 +22852,9 @@ var Search = React.createClass({ displayName: 'Search',
 		}, this);
 		
 		result.matchedTowards = o;		
-		if(s == goal) result.isMatch = true;
+		if(s === goal) {
+			result.isMatch = true;
+		}
 		return result;
 	},
 	
@@ -22860,7 +22866,7 @@ var Search = React.createClass({ displayName: 'Search',
 		
 		var options = {};
 
-		_.each(this.props.data, function(v, k) {
+		_.each(this.props.data, function(v) {
 		
 			_.each(this.props.template, function(pv, pk) {
 			
