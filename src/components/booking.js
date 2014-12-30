@@ -107,6 +107,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 	},
 	
 	bookObj: function(e, obj) {
+
 		if(this.state.booker_name && this.state.booker_name.trim().length > 0 && this.state.booker_tel && this.state.booker_tel.trim().length > 0) {
 			var newobj = { booker: this.state.booker_name, tel: this.state.booker_tel, booked: obj };
 			this.fireBaseRef.push(newobj);

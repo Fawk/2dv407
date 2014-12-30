@@ -22084,12 +22084,6 @@ var Search = require('./search.js');
 var _ = require('underscore');
 var Booking = require('./booking.js');
 
-var Message = React.createClass({displayName: 'Message',
-	render: function() {
-		return (React.DOM.div(null, this.props.value));
-	}
-}); 
-
 var VehicleList = React.createClass({displayName: 'VehicleList',
   render: function() {
   		var c = this.props.crud;
@@ -22122,17 +22116,17 @@ var VehicleList = React.createClass({displayName: 'VehicleList',
 			return React.DOM.div(null, React.DOM.span(null, React.DOM.b(null,  c.template[key].name),  ": " + v));
 		};
 
-		var createItem = function(i, k) {
+		var createItem = function(i) {
 		
 				if(!c.matchesTemplate(i.val)) {
 					return React.DOM.li({key:  i.key}, "Datan på detta objekt är av felaktigt tema!" );
 				}
 		
-				if(state.isUpdating && (i.key == state.updateTargetKey)) {
+				if(state.isUpdating && (i.key === state.updateTargetKey)) {
 					
 					return (
 								React.DOM.li({className: "list-group-item", key:  i.key}, 				
-									React.DOM.form({id: "updateForm", onSubmit:  function(e) { c.updateWithTemplate(e, i.key) }}, 
+									React.DOM.form({id: "updateForm", onSubmit:  function(e) { c.updateWithTemplate(e, i.key); }}, 
 										 _.map(i.val, updating), 
 										React.DOM.button({className: "btn btn-danger", type: "button", onClick:  c.stopUpdating}, "Avbryt" ), 
 										React.DOM.button({className: "btn btn-primary"}, "Ändra bil" )
@@ -22144,8 +22138,8 @@ var VehicleList = React.createClass({displayName: 'VehicleList',
 				
 					return (
 								React.DOM.li({'data-status': "closed", className: "list-group-item", key:  i.key}, 
-									React.DOM.a({href: "#", onClick:  function(e) { c.removeObject(e, i.key) }}, "Ta bort" ), 
-									React.DOM.a({id:  i.key, className: "triggerUpdate", href: "#", onClick:  function(e) { c.triggerUpdate(e, i.val) }}, "Ändra" ), 
+									React.DOM.a({href: "#", onClick:  function(e) { c.removeObject(e, i.key); }}, "Ta bort" ), 
+									React.DOM.a({id:  i.key, className: "triggerUpdate", href: "#", onClick:  function(e) { c.triggerUpdate(e, i.val); }}, "Ändra" ), 
 									React.DOM.span({className: "trigger"},  i.val.name), 
 									React.DOM.div({className: "extended"}, 
 										 _.map(i.val, extending) 
@@ -22245,7 +22239,7 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 	
 		$("body").on("click", "#listr li .trigger, #listn li .trigger, #listb1 li .trigger, #listb1 li .trigger", function() {
 			if(!self.isUpdating) {
-				if($(this).parent().attr("data-status") == "closed") {
+				if($(this).parent().attr("data-status") === "closed") {
 					$(this).parent().animate({ height: "150px" }, 200, function() {
 						$(this).find(".extended").fadeIn("fast");
 					});
@@ -22266,8 +22260,9 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 	
 	matchesTemplate: function(obj) {
 		Object.keys(obj).forEach(function(key) {
-			if(!(key in this.template))
+			if(!(key in this.template)) {
 				return false;
+			}
 		}.bind(this));
 		return true;
 	},
@@ -22284,8 +22279,8 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 		this.setState({ fake: !this.state.fake });
 	},
 	
-	stopUpdating: function(e) {
-		this.setState({ isUpdating: false })
+	stopUpdating: function() {
+		this.setState({ isUpdating: false });
 	},
 	
 	getInitialState: function() {
@@ -22303,7 +22298,7 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 		
 			this.fireBaseRef.child(id).remove();
 			for(var i in this.vehicles) {
-				if(this.vehicles[i].key == id) {
+				if(this.vehicles[i].key === id) {
 					this.vehicles.splice(i, 1);
 					break;
 				}	
@@ -22374,12 +22369,15 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 
 		_.each(this.template, function(obj, key) {
 			
-			if(this.state.isUpdating) key = key + "_update";
+			if(this.state.isUpdating) {
+				key = key + "_update";
+			}
 			
 			if(this.state[key]) {
 				if(obj.type === "string" || obj.type === "number") {
-					if(this.state[key].trim().length === 0)
+					if(this.state[key].trim().length === 0) {
 						return true;
+					}
 				}
 			}
 		}, this);
@@ -22392,7 +22390,9 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 		var o = {};
 		_.each(this.template, function(obj, key) {
 		
-			if(this.state.isUpdating) key = key + "_update";
+			if(this.state.isUpdating) {
+				key = key + "_update";
+			}
 		
 			switch(obj.type) {
 				case "string": o[key] = ""; break;
@@ -22517,6 +22517,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 	},
 	
 	bookObj: function(e, obj) {
+
 		if(this.state.booker_name && this.state.booker_name.trim().length > 0 && this.state.booker_tel && this.state.booker_tel.trim().length > 0) {
 			var newobj = { booker: this.state.booker_name, tel: this.state.booker_tel, booked: obj };
 			this.fireBaseRef.push(newobj);
