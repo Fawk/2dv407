@@ -32,9 +32,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 			return <div><span><b>{ this.props.template[key].name }</b>{ ": " + v }</span></div>;
 		}.bind(this);
 		
-		var a = function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList); } else { return "Inget är bokat!"; } }.bind(this);
-		console.log(a);
-		
+		var a = function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList); } else { return "Inget är bokat!"; } }.bind(this)();
 		
 		if(this.props.obj !== undefined) {
 		
