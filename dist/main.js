@@ -22442,7 +22442,7 @@ module.exports = React.createClass({ displayName: "BookingClass",
 			return React.DOM.div(null, React.DOM.span(null, React.DOM.b(null,  this.props.template[key].name),  ": " + v));
 		}.bind(this);
 		
-		var a = function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList); } else { return "Inget är bokat!"; } }.bind(this);
+		var a = function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList); } else { return "Inget är bokat!"; } }.bind(this)();
 
 		if(this.props.obj !== undefined) {
 		
