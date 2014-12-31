@@ -33,7 +33,9 @@ module.exports = React.createClass({ displayName: "BookingClass",
 		}.bind(this);
 		
 		var a = function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList); } else { return "Inget är bokat!"; } }.bind(this);
-
+		console.log(a);
+		
+		
 		if(this.props.obj !== undefined) {
 		
 			return (
