@@ -11,13 +11,13 @@ module.exports = React.createClass({ displayName: "BookingClass",
 	mixins: [React.addons.LinkedStateMixin],
 	render: function() {
 
-		var bookedList = function(value) {
+		var bookedList = function(value, key) {
 			
 			console.log(value);
 		
 			return (
 				<li data-status="closed" className="list-group-item">
-					<a id={ value.val.booked.key } href='#' onClick={ function(e) { this.removeBooked(value.val.booked); this.props.crud.unbookObject(e, value.val.booked); }.bind(this) }>{ "Avboka" }</a>
+					<a id={ value.val.booked.key } href='#' onClick={ function(e) { this.removeBooked(value.val.booked, key); this.props.crud.unbookObject(e, value.val.booked); }.bind(this) }>{ "Avboka" }</a>
 					<div className="trigger">{ "Bokad av: " + value.val.booker }</div>
 					<div className="extended">
 						{ _.map(value.val.booked.val, extending) }
@@ -119,10 +119,12 @@ module.exports = React.createClass({ displayName: "BookingClass",
 		}
 	},
 	
-	removeBooked: function(obj) {
+	removeBooked: function(obj, fkey) {
 	
 		console.log(obj);
 		console.log(this.booked);
+		
+		this.fireBaseRef.child(fkey).remove();
 	
 		var found = false;
 		_.each(this.booked, function(value, key) {
