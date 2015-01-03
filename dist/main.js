@@ -22632,7 +22632,7 @@ var Search = React.createClass({ displayName: 'Search',
 							var expr = this.refs[key].getDOMNode().value;
 							expr = expr.trim();
 
-							goal = this.searchLogic(rk, expr, numRanges);			
+							goal += this.searchLogic(rk, expr, numRanges);			
 
 						break;
 							
@@ -22646,10 +22646,7 @@ var Search = React.createClass({ displayName: 'Search',
 			}
 			
 		}, this);
-		
-		
-		console.log(numRanges);
-		
+
 		var s = 0;
 		var o = {};
 		
@@ -22702,7 +22699,7 @@ var Search = React.createClass({ displayName: 'Search',
 			}
 			
 		}, this);
-		
+
 		result.matchedTowards = o;		
 		if(s === goal) {
 			result.isMatch = true;
