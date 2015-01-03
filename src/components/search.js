@@ -3,48 +3,7 @@
 
 var React = require('react/addons');
 var _ = require('underscore');
-
-var SearchResult = React.createClass({ displayName: 'SearchResult', 
-
-	render: function() {
-	
-		var extending = function(value, key) {
-			var v = typeof value === "boolean" ? value === true ? "Ja" : "Nej" : value;
-			return <div><span><b>{ this.props.crud.template[key].name }</b>{ ": " + v }</span></div>;
-		}.bind(this);
-	
-		var createItem = function(obj) {
-		
-			if(obj.match) {
-				return (
-					<li data-status="closed" className="list-group-item" key={ obj.match.key }>
-						<a id={ obj.match.key } href='#' onClick={ function(e) { this.props.crud.bookObject(e, obj.match); }.bind(this) }>{ "Boka" }</a>
-						<span className="trigger">{ obj.match.val.name }</span>
-						<div className="extended">
-							{ _.map(obj.match.val, extending) }
-						</div>
-					</li>
-				);
-			}
-		}.bind(this);
-		
-		if(this.props.result) {
-		
-			return (
-				<div className="scroll">
-					<span className="hits">{ this.props.result.hits + " träffar!" }</span>
-					<ul className="list-group" id="listn">
-						{ _.map(this.props.result.data, createItem) }
-					</ul>
-				</div>
-			);
-		
-		} else {
-			return null;
-		}
-	}
-	
-});
+var SearchResult = require('./searchresult.js');
 
 var Search = React.createClass({ displayName: 'Search',
 
@@ -74,21 +33,16 @@ var Search = React.createClass({ displayName: 'Search',
 			
 				case "number":
 					return (
-							<div>
-								{ this.props.template[key].name }
-								<div className="search_options"><span className="f">Från </span>
-									<input key={ key + "_search_from" } placeholder={ this.options[key].lowest } ref={ key + "_search_from" } className="from" type="number" min="0" max={ this.options[key].highest+1 } valueLink={ this.linkState(key + "_search_from") } />
-									<div className="action" data-type="0">&nbsp;&rarr;&nbsp;</div>
-									<input key={ key + "_search_to" } placeholder={ this.options[key].highest } ref={ key + "_search_to" } type="number" min="0" max={ this.options[key].highest+1 } valueLink={ this.linkState(key + "_search_to") } className="to" />
-									<span className="t"> Till</span>
-									<span className="error">{ error }</span>
-								</div>
+							<div className="search_field">
+								{ this.props.template[key].name + ": "}
+								<input key={ key + "_search_from" } placeholder={ "Ex: < 1000, > 1000, 1000->2000" } ref={ key + "_search_from" } className="from" type="text" valueLink={ this.linkState(key + "_search_from") } />
+								<span className="error">{ error }</span>
 							</div>
 						);
 					
 				case "string":
 					return (
-						<div>
+						<div className="search_field">
 							{ this.props.template[key].name + ": " }
 							<input key={ key + "_search" } type='text' className='string' size='10' ref={ key + "_search" } valueLink={ this.linkState(key + "_search") } />
 							<span className="error">{ error }</span>
@@ -97,7 +51,7 @@ var Search = React.createClass({ displayName: 'Search',
 					
 				case "boolean":
 					return (
-						<div>
+						<div className="search_field">
 							<label htmlFor={ key + "_search" } />
 							<input key={ key + "_search" } ref={ key + "_search" } id={ key + "_search" } type='checkbox' className='boolean' checkedLink={ this.linkState(key + "_search") } />
 							{ this.props.template[key].name } 
@@ -125,34 +79,6 @@ var Search = React.createClass({ displayName: 'Search',
 	
 	componentDidMount: function() {
 
-		var self = this;
-		$("body").on("click", ".action", function() {
-		
-			var i = parseInt($(this).attr("data-type"));
-			i++;
-			if(i === self.numberStates.length) {
-				i = 0;
-			}
-			if(i === 1 || i === 2) {
-				$(this).parent().find(".to").hide();
-				if(i === 1) {
-					$(this).parent().find(".f").text("Mindre än ");
-				} else {
-					$(this).parent().find(".f").text("Större än ");
-				}
-				$(this).parent().find(".t").text("");
-			} else {
-				$(this).parent().find(".to").show();
-				$(this).parent().find(".f").text("Från ");
-				$(this).parent().find(".t").text(" Till");
-			}
-			$(this).attr("data-type", i);
-			self.setType($(this), i);
-		});
-	},
-	
-	setType: function(el, index) {
-		el.html("&nbsp;" + this.numberStates[index].character + "&nbsp;");
 	},
 	
 	handleSubmit: function(e) {
@@ -204,35 +130,18 @@ var Search = React.createClass({ displayName: 'Search',
 				if(rk in this.props.template) {
 				
 					switch(this.props.template[rk].type) {
+
 						case "number":
 							var fk = key.split("_")[2];
-							
-							var jnode = $(this.refs[key].getDOMNode());
-							
-							var tk = key.substr(0, (key.length-4)) + "to";
 							
 							if(!(rk in numRanges)) {
 								numRanges[rk] = {};
 							}
-							
-							if(fk === "from" && !(tk in this.state)) {
-							
-								numRanges[rk][this.numberStates[parseInt(jnode.parent().find(".action").attr("data-type"))].name] = true;
-								numRanges[rk][fk] = parseInt(value);
-								goal++;
-								
-							} else {
 
-								if(fk === "to" && (parseInt(value) < numRanges[rk].from)) {
-									this.stopSearch = true;
-									this.errors[rk] = "Till kan inte vara lägre än från!";
-									this.setState({ hasError: true });
-									return {};
-								}
-								
-								numRanges[rk][fk] = parseInt(value);
-								goal++;					
-							}
+							var expr = this.refs[key].getDOMNode().value;
+							expr = expr.trim();
+
+							goal = this.searchLogic(rk, expr, numRanges);			
 
 						break;
 							
@@ -247,6 +156,8 @@ var Search = React.createClass({ displayName: 'Search',
 			
 		}, this);
 		
+		
+		console.log(numRanges);
 		
 		var s = 0;
 		var o = {};
@@ -306,6 +217,77 @@ var Search = React.createClass({ displayName: 'Search',
 			result.isMatch = true;
 		}
 		return result;
+	},
+	
+	searchLogic: function(rk, v, numRanges) {
+		
+		var g = 0;
+		var less = v.indexOf("<");
+		var more = v.indexOf(">");
+		var range = v.indexOf("->");
+
+		if(range === -1 && less === -1 && more === -1) {
+			this.stopSearchWithError(rk, "Felaktig söksträng!");
+			return {};											
+		}
+		
+		if(range !== -1) {	
+			
+			var r = v.split("->");
+			var f, t;
+			try {
+				f = parseInt(r[0]);
+				t = parseInt(r[1]);
+			} catch(err) {
+				this.stopSearchWithError(rk, "Inte giltigt nummerformat!");
+				return {};
+			}
+			
+			if(f > t) {
+				this.stopSearchWithError(rk, "Till kan inte vara lägre än från!");
+				return {};
+			}
+			
+			numRanges[rk] = { "range": true, "from": f, "to": t };
+			g+=2;
+			
+		} else if(less !== -1 || more !== -1) {
+			
+			var r, f;
+			if(less !== -1) {
+				r = v.split("<");
+			} else if(more !== -1) {
+				r = v.split(">");
+			}
+			
+			try {
+				f = parseInt(r[1]);
+			} catch(err) {
+				this.stopSearchWithError(rk, "Inte giltigt nummerformat!");
+				return {};
+			}
+			
+			if(less !== -1) {
+				numRanges[rk] = { "less": true, "from": f }
+			} else if(more !== -1) {
+				numRanges[rk] = { "more": true, "from": f }	
+			}
+			g++;
+			
+		} else {
+			if(range !== -1 && (less !== -1 || more !== -1)) {
+				this.stopSearchWithError(rk, "Inte giltigt nummerformat!");
+				return {};
+			}
+		}
+		
+		return g;
+	},
+	
+	stopSearchWithError: function(key, msg) {
+		this.stopSearch = true;
+		this.errors[key] = msg;
+		this.setState({ hasError: true });
 	},
 	
 	getInitialState: function() {

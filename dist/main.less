@@ -45,7 +45,6 @@
 		}
 		
 		li .extended {
-			display:none;
 			padding:10px 0 10px 0;
 		}
 		
@@ -71,7 +70,6 @@
 		}
 		
 		li .extended {
-			display:none;
 			padding:10px 0 10px 0;
 		}
 		
@@ -81,6 +79,10 @@
 		}
 	}
 	.hits { float:left; margin:-20px 0 0 0; }
+	.search_field {
+		height: 34px;
+		line-height:34px;
+	}
 }
 
 .bookingContainer {
@@ -91,7 +93,6 @@
 	.scroll { 
 		&:extend(.addContainer .scroll); 
 		li .extended {
-			display:none;
 			padding:10px 0 10px 0;
 		}
 		
@@ -152,8 +153,9 @@
 	
 	input[type="text"], input[type="number"] {
 		&:extend(.form-control);
-		width:30%;
-		display:inline;
+		width:73%;
+		display:block;
+		float:right;
 	}
 	
 	.error {

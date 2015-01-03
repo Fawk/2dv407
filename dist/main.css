@@ -5970,14 +5970,12 @@ td.visible-print {
   cursor: pointer;
 }
 .addContainer .scroll li .extended {
-  display: none;
   padding: 10px 0 10px 0;
 }
 .searchContainer .scroll li .trigger:hover {
   cursor: pointer;
 }
 .searchContainer .scroll li .extended {
-  display: none;
   padding: 10px 0 10px 0;
 }
 .searchContainer .scroll li a {
@@ -5988,12 +5986,15 @@ td.visible-print {
   float: left;
   margin: -20px 0 0 0;
 }
+.searchContainer .search_field {
+  height: 34px;
+  line-height: 34px;
+}
 .bookingContainer .hits {
   float: left;
   margin: -20px 0 0 0;
 }
 .bookingContainer .scroll li .extended {
-  display: none;
   padding: 10px 0 10px 0;
 }
 .bookingContainer .scroll li .trigger:hover {
@@ -6032,8 +6033,9 @@ td.visible-print {
 }
 #searchForm input[type="text"],
 #searchForm input[type="number"] {
-  width: 30%;
-  display: inline;
+  width: 73%;
+  display: block;
+  float: right;
 }
 #searchForm .error {
   color: red;

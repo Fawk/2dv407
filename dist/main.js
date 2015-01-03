@@ -22084,78 +22084,7 @@ var Firebase = require('firebase');
 var Search = require('./search.js');
 var _ = require('underscore');
 var Booking = require('./booking.js');
-
-var VehicleList = React.createClass({displayName: 'VehicleList',
-  render: function() {
-  		var c = this.props.crud;
-		var state = c.state;
-		
-		var updating = function(value, key) {
-			
-			if(c.template[key].type === "number" || c.template[key].type === "string") {
-				var type = c.template[key].type === "number" ? "number" : "text";
-				return (
-					React.DOM.div(null, 
-						React.DOM.span(null,  c.template[key].name + ":"), 
-						React.DOM.input({key:  key + c.template[key].name + "_update", type: type, ref: key, valueLink:  c.linkState(key + "_update"), className: "form-control"})
-					)
-				);
-			} else {
-				return (
-					React.DOM.div(null, 
-						React.DOM.label({htmlFor:  key + c.template[key].name + "_update"}, 
-							React.DOM.input({id:  key + c.template[key].name + "_update", key:  key + c.template[key].name + "_update", type: "checkbox", className: "boolean", checkedLink:  c.linkState(key + "_update") }), 
-							 c.template[key].name
-						)
-					)
-				);
-			}
-		};
-		
-		var extending = function(value, key) {
-			var v = typeof value === "boolean" ? value === true ? "Ja" : "Nej" : value;
-			return React.DOM.div(null, React.DOM.span(null, React.DOM.b(null,  c.template[key].name),  ": " + v));
-		};
-
-		var createItem = function(i) {
-		
-				if(!c.matchesTemplate(i.val)) {
-					return React.DOM.li({key:  i.key}, "Datan på detta objekt är av felaktigt tema!" );
-				}
-		
-				if(state.isUpdating && (i.key === state.updateTargetKey)) {
-					
-					return (
-								React.DOM.li({className: "list-group-item", key:  i.key}, 				
-									React.DOM.form({id: "updateForm", onSubmit:  function(e) { c.updateWithTemplate(e, i.key); }}, 
-										 _.map(i.val, updating), 
-										React.DOM.button({className: "btn btn-danger", type: "button", onClick:  c.stopUpdating}, "Avbryt" ), 
-										React.DOM.button({className: "btn btn-primary"}, "Ändra bil" )
-									)
-								)
-							);
-				
-				} else {
-				
-					return (
-								React.DOM.li({'data-status': "closed", className: "list-group-item", key:  i.key}, 
-									React.DOM.a({href: "#", onClick:  function(e) { c.removeObject(e, i.key); }}, "Ta bort" ), 
-									React.DOM.a({id:  i.key, className: "triggerUpdate", href: "#", onClick:  function(e) { c.triggerUpdate(e, i.val); }}, "Ändra" ), 
-									React.DOM.span({className: "trigger"},  i.val.name), 
-									React.DOM.div({className: "extended"}, 
-										 _.map(i.val, extending) 
-									)
-								)
-							);
-				}
-		};
-		if(c.vehicles !== undefined && c.vehicles.length !== 0) {
-			return React.DOM.ul({className: "list-group", id: "listr"},  c.vehicles.map(createItem) );
-		} else {
-			return React.DOM.ul(null, "Det fanns inga bilar att boka!" );
-		}
-	}
-});
+var VehicleList = require('./vehiclelist.js');
 
 var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 
@@ -22238,7 +22167,7 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 	componentDidMount: function() {
 		var self = this;
 	
-		$("body").on("click", "#listr li .trigger, #listn li .trigger, #listb1 li .trigger, #listb1 li .trigger", function() {
+		/*$("body").on("click", "#listr li .trigger, #listn li .trigger, #listb1 li .trigger, #listb1 li .trigger", function() {
 			if(!self.isUpdating) {
 				if($(this).parent().attr("data-status") === "closed") {
 					$(this).parent().animate({ height: "150px" }, 200, function() {
@@ -22256,7 +22185,7 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 		
 		$("body").on("click", "#listr li .triggerUpdate", function() {
 			$(this).parent().css({ height: "auto" });
-		});
+		});*/
 	},
 	
 	matchesTemplate: function(obj) {
@@ -22407,7 +22336,7 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 });
 
 module.exports = VehicleCRUD;
-},{"./booking.js":165,"./search.js":166,"firebase":1,"react/addons":3,"underscore":163}],165:[function(require,module,exports){
+},{"./booking.js":165,"./search.js":166,"./vehiclelist.js":168,"firebase":1,"react/addons":3,"underscore":163}],165:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var Firebase = require('firebase');
@@ -22423,14 +22352,14 @@ module.exports = React.createClass({ displayName: "BookingClass",
 
 		var bookedList = function(value, key) {
 			
-			console.log(value);
+			var ex = this.state[value.val.booked.key + "_booking_extended"] ? _.map(value.val.booked.val, extending) : "";
 		
 			return (
 				React.DOM.li({'data-status': "closed", className: "list-group-item"}, 
 					React.DOM.a({id:  value.val.booked.key, href: "#", onClick:  function(e) { this.removeBooked(value.val.booked, key); this.props.crud.unbookObject(e, value.val.booked); }.bind(this) }, "Avboka" ), 
-					React.DOM.div({className: "trigger"},  "Bokad av: " + value.val.booker), 
+					React.DOM.div({className: "trigger", onClick:  function() { this.setExtended(value.val.booked.key); }.bind(this) },  "Bokad av: " + value.val.booker), 
 					React.DOM.div({className: "extended"}, 
-						 _.map(value.val.booked.val, extending) 
+						ex 
 					)
 				)
 			);
@@ -22443,8 +22372,10 @@ module.exports = React.createClass({ displayName: "BookingClass",
 		}.bind(this);
 		
 		var a = function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList); } else { return "Inget är bokat!"; } }.bind(this)();
-
+		
 		if(this.props.obj !== undefined) {
+			
+			var ex = this.state[this.props.obj.key + "_booking_extended"] ? _.map(this.props.obj.val, extending) : "";
 		
 			return (
 			React.DOM.div(null, 
@@ -22459,9 +22390,9 @@ module.exports = React.createClass({ displayName: "BookingClass",
 					React.DOM.div({className: "booktarget"}, 
 						React.DOM.ul({className: "list-group", id: "listb2"}, 
 							React.DOM.li({'data-status': "closed", className: "list-group-item", key:  this.props.obj.key}, 
-								React.DOM.span({className: "trigger"},  this.props.obj.val.name), 
+								React.DOM.span({className: "trigger", onClick:  function() { this.setExtended(this.props.obj.key); }.bind(this) },  this.props.obj.val.name), 
 								React.DOM.div({className: "extended"}, 
-									 _.map(this.props.obj.val, extending) 
+									ex 
 								)
 							)
 						)
@@ -22495,6 +22426,15 @@ module.exports = React.createClass({ displayName: "BookingClass",
 		
 		}
 	},
+
+	setExtended: function(key) {
+		var obj = {};
+		obj[key + "_booking_extended"] = true;
+		if(this.state[key + "_booking_extended"]) {
+			obj[key + "_booking_extended"] = false;
+		}
+		this.setState(obj);
+	},
 	
 	componentWillMount: function() {
 		
@@ -22519,6 +22459,8 @@ module.exports = React.createClass({ displayName: "BookingClass",
 	},
 	
 	bookObj: function(e, obj) {
+		
+		e.preventDefault();
 
 		if(this.state.booker_name && this.state.booker_name.trim().length > 0 && this.state.booker_tel && this.state.booker_tel.trim().length > 0) {
 			var newobj = { booker: this.state.booker_name, tel: this.state.booker_tel, booked: obj };
@@ -22549,54 +22491,14 @@ module.exports = React.createClass({ displayName: "BookingClass",
 
 });
 	
+
 },{"firebase":1,"react/addons":3,"underscore":163}],166:[function(require,module,exports){
 /** @jsx React.DOM */
 /* global $ */
 
 var React = require('react/addons');
 var _ = require('underscore');
-
-var SearchResult = React.createClass({ displayName: 'SearchResult', 
-
-	render: function() {
-	
-		var extending = function(value, key) {
-			var v = typeof value === "boolean" ? value === true ? "Ja" : "Nej" : value;
-			return React.DOM.div(null, React.DOM.span(null, React.DOM.b(null,  this.props.crud.template[key].name),  ": " + v));
-		}.bind(this);
-	
-		var createItem = function(obj) {
-		
-			if(obj.match) {
-				return (
-					React.DOM.li({'data-status': "closed", className: "list-group-item", key:  obj.match.key}, 
-						React.DOM.a({id:  obj.match.key, href: "#", onClick:  function(e) { this.props.crud.bookObject(e, obj.match); }.bind(this) }, "Boka" ), 
-						React.DOM.span({className: "trigger"},  obj.match.val.name), 
-						React.DOM.div({className: "extended"}, 
-							 _.map(obj.match.val, extending) 
-						)
-					)
-				);
-			}
-		}.bind(this);
-		
-		if(this.props.result) {
-		
-			return (
-				React.DOM.div({className: "scroll"}, 
-					React.DOM.span({className: "hits"},  this.props.result.hits + " träffar!"), 
-					React.DOM.ul({className: "list-group", id: "listn"}, 
-						 _.map(this.props.result.data, createItem) 
-					)
-				)
-			);
-		
-		} else {
-			return null;
-		}
-	}
-	
-});
+var SearchResult = require('./searchresult.js');
 
 var Search = React.createClass({ displayName: 'Search',
 
@@ -22626,21 +22528,16 @@ var Search = React.createClass({ displayName: 'Search',
 			
 				case "number":
 					return (
-							React.DOM.div(null, 
-								 this.props.template[key].name, 
-								React.DOM.div({className: "search_options"}, React.DOM.span({className: "f"}, "Från "), 
-									React.DOM.input({key:  key + "_search_from", placeholder:  this.options[key].lowest, ref:  key + "_search_from", className: "from", type: "number", min: "0", max:  this.options[key].highest+1, valueLink:  this.linkState(key + "_search_from") }), 
-									React.DOM.div({className: "action", 'data-type': "0"}, " → "), 
-									React.DOM.input({key:  key + "_search_to", placeholder:  this.options[key].highest, ref:  key + "_search_to", type: "number", min: "0", max:  this.options[key].highest+1, valueLink:  this.linkState(key + "_search_to"), className: "to"}), 
-									React.DOM.span({className: "t"}, " Till"), 
-									React.DOM.span({className: "error"}, error )
-								)
+							React.DOM.div({className: "search_field"}, 
+								 this.props.template[key].name + ": ", 
+								React.DOM.input({key:  key + "_search_from", placeholder: "Ex: < 1000, > 1000, 1000->2000", ref:  key + "_search_from", className: "from", type: "text", valueLink:  this.linkState(key + "_search_from") }), 
+								React.DOM.span({className: "error"}, error )
 							)
 						);
 					
 				case "string":
 					return (
-						React.DOM.div(null, 
+						React.DOM.div({className: "search_field"}, 
 							 this.props.template[key].name + ": ", 
 							React.DOM.input({key:  key + "_search", type: "text", className: "string", size: "10", ref:  key + "_search", valueLink:  this.linkState(key + "_search") }), 
 							React.DOM.span({className: "error"}, error )
@@ -22649,7 +22546,7 @@ var Search = React.createClass({ displayName: 'Search',
 					
 				case "boolean":
 					return (
-						React.DOM.div(null, 
+						React.DOM.div({className: "search_field"}, 
 							React.DOM.label({htmlFor:  key + "_search"}), 
 							React.DOM.input({key:  key + "_search", ref:  key + "_search", id:  key + "_search", type: "checkbox", className: "boolean", checkedLink:  this.linkState(key + "_search") }), 
 							 this.props.template[key].name
@@ -22677,34 +22574,6 @@ var Search = React.createClass({ displayName: 'Search',
 	
 	componentDidMount: function() {
 
-		var self = this;
-		$("body").on("click", ".action", function() {
-		
-			var i = parseInt($(this).attr("data-type"));
-			i++;
-			if(i === self.numberStates.length) {
-				i = 0;
-			}
-			if(i === 1 || i === 2) {
-				$(this).parent().find(".to").hide();
-				if(i === 1) {
-					$(this).parent().find(".f").text("Mindre än ");
-				} else {
-					$(this).parent().find(".f").text("Större än ");
-				}
-				$(this).parent().find(".t").text("");
-			} else {
-				$(this).parent().find(".to").show();
-				$(this).parent().find(".f").text("Från ");
-				$(this).parent().find(".t").text(" Till");
-			}
-			$(this).attr("data-type", i);
-			self.setType($(this), i);
-		});
-	},
-	
-	setType: function(el, index) {
-		el.html("&nbsp;" + this.numberStates[index].character + "&nbsp;");
 	},
 	
 	handleSubmit: function(e) {
@@ -22756,35 +22625,18 @@ var Search = React.createClass({ displayName: 'Search',
 				if(rk in this.props.template) {
 				
 					switch(this.props.template[rk].type) {
+
 						case "number":
 							var fk = key.split("_")[2];
-							
-							var jnode = $(this.refs[key].getDOMNode());
-							
-							var tk = key.substr(0, (key.length-4)) + "to";
 							
 							if(!(rk in numRanges)) {
 								numRanges[rk] = {};
 							}
-							
-							if(fk === "from" && !(tk in this.state)) {
-							
-								numRanges[rk][this.numberStates[parseInt(jnode.parent().find(".action").attr("data-type"))].name] = true;
-								numRanges[rk][fk] = parseInt(value);
-								goal++;
-								
-							} else {
 
-								if(fk === "to" && (parseInt(value) < numRanges[rk].from)) {
-									this.stopSearch = true;
-									this.errors[rk] = "Till kan inte vara lägre än från!";
-									this.setState({ hasError: true });
-									return {};
-								}
-								
-								numRanges[rk][fk] = parseInt(value);
-								goal++;					
-							}
+							var expr = this.refs[key].getDOMNode().value;
+							expr = expr.trim();
+
+							goal = this.searchLogic(rk, expr, numRanges);			
 
 						break;
 							
@@ -22799,6 +22651,8 @@ var Search = React.createClass({ displayName: 'Search',
 			
 		}, this);
 		
+		
+		console.log(numRanges);
 		
 		var s = 0;
 		var o = {};
@@ -22860,6 +22714,77 @@ var Search = React.createClass({ displayName: 'Search',
 		return result;
 	},
 	
+	searchLogic: function(rk, v, numRanges) {
+		
+		var g = 0;
+		var less = v.indexOf("<");
+		var more = v.indexOf(">");
+		var range = v.indexOf("->");
+
+		if(range === -1 && less === -1 && more === -1) {
+			this.stopSearchWithError(rk, "Felaktig söksträng!");
+			return {};											
+		}
+		
+		if(range !== -1) {	
+			
+			var r = v.split("->");
+			var f, t;
+			try {
+				f = parseInt(r[0]);
+				t = parseInt(r[1]);
+			} catch(err) {
+				this.stopSearchWithError(rk, "Inte giltigt nummerformat!");
+				return {};
+			}
+			
+			if(f > t) {
+				this.stopSearchWithError(rk, "Till kan inte vara lägre än från!");
+				return {};
+			}
+			
+			numRanges[rk] = { "range": true, "from": f, "to": t };
+			g+=2;
+			
+		} else if(less !== -1 || more !== -1) {
+			
+			var r, f;
+			if(less !== -1) {
+				r = v.split("<");
+			} else if(more !== -1) {
+				r = v.split(">");
+			}
+			
+			try {
+				f = parseInt(r[1]);
+			} catch(err) {
+				this.stopSearchWithError(rk, "Inte giltigt nummerformat!");
+				return {};
+			}
+			
+			if(less !== -1) {
+				numRanges[rk] = { "less": true, "from": f }
+			} else if(more !== -1) {
+				numRanges[rk] = { "more": true, "from": f }	
+			}
+			g++;
+			
+		} else {
+			if(range !== -1 && (less !== -1 || more !== -1)) {
+				this.stopSearchWithError(rk, "Inte giltigt nummerformat!");
+				return {};
+			}
+		}
+		
+		return g;
+	},
+	
+	stopSearchWithError: function(key, msg) {
+		this.stopSearch = true;
+		this.errors[key] = msg;
+		this.setState({ hasError: true });
+	},
+	
 	getInitialState: function() {
 		return { forms: [] };
 	},
@@ -22902,7 +22827,168 @@ var Search = React.createClass({ displayName: 'Search',
 
 module.exports = Search;
 
-},{"react/addons":3,"underscore":163}],167:[function(require,module,exports){
+},{"./searchresult.js":167,"react/addons":3,"underscore":163}],167:[function(require,module,exports){
+/** @jsx React.DOM */
+
+var React = require('react/addons');
+var _ = require('underscore');
+
+var SearchResult = React.createClass({ displayName: 'SearchResult', 
+	
+	getInitialState: function() {
+		return { ex: "" }
+	},
+
+	render: function() {
+	
+		var extending = function(value, key) {
+			var v = typeof value === "boolean" ? value === true ? "Ja" : "Nej" : value;
+			return React.DOM.div(null, React.DOM.span(null, React.DOM.b(null,  this.props.crud.template[key].name),  ": " + v));
+		}.bind(this);
+	
+		var createItem = function(obj) {
+			
+			var ex = this.state[obj.match.key + "_search_extended"] ? _.map(obj.match.val, extending) : "";
+		
+			if(obj.match) {
+				return (
+					React.DOM.li({'data-status': "closed", className: "list-group-item", key:  obj.match.key}, 
+						React.DOM.a({id:  obj.match.key, href: "#", onClick:  function(e) { this.props.crud.bookObject(e, obj.match); }.bind(this) }, "Boka" ), 
+						React.DOM.span({className: "trigger", onClick:  function() { this.setExtended(obj.match.key); }.bind(this) },  obj.match.val.name), 
+						React.DOM.div({className: "extended"}, 
+							ex 
+						)
+					)
+				);
+			}
+		}.bind(this);
+		
+		if(this.props.result) {
+		
+			return (
+				React.DOM.div({className: "scroll"}, 
+					React.DOM.span({className: "hits"},  this.props.result.hits + " träffar!"), 
+					React.DOM.ul({className: "list-group", id: "listn"}, 
+						 _.map(this.props.result.data, createItem) 
+					)
+				)
+			);
+		
+		} else {
+			return null;
+		}
+	},
+	
+	setExtended: function(key) {
+		var obj = {};
+
+		obj[key + "_search_extended"] = true;
+		if(this.state[key + "_search_extended"]) {
+			obj[key + "_search_extended"] = false;
+		}
+		this.setState(obj);
+	}
+	
+});
+
+module.exports = SearchResult;
+},{"react/addons":3,"underscore":163}],168:[function(require,module,exports){
+/** @jsx React.DOM */
+
+var React = require('react/addons');
+var _ = require('underscore');
+
+var VehicleList = React.createClass({displayName: 'VehicleList',
+	
+	getInitialState: function() {
+		return { ex: "" }
+	},
+
+    render: function() {
+		var c = this.props.crud;
+		var state = c.state;
+		
+		var updating = function(value, key) {
+			
+			if(c.template[key].type === "number" || c.template[key].type === "string") {
+				var type = c.template[key].type === "number" ? "number" : "text";
+				return (
+					React.DOM.div(null, 
+						React.DOM.span(null,  c.template[key].name + ":"), 
+						React.DOM.input({key:  key + c.template[key].name + "_update", type: type, ref: key, valueLink:  c.linkState(key + "_update"), className: "form-control"})
+					)
+				);
+			} else {
+				return (
+					React.DOM.div(null, 
+						React.DOM.label({htmlFor:  key + c.template[key].name + "_update"}, 
+							React.DOM.input({id:  key + c.template[key].name + "_update", key:  key + c.template[key].name + "_update", type: "checkbox", className: "boolean", checkedLink:  c.linkState(key + "_update") }), 
+							 c.template[key].name
+						)
+					)
+				);
+			}
+		};
+		
+		var extending = function(value, key) {
+			var v = typeof value === "boolean" ? value === true ? "Ja" : "Nej" : value;
+			return React.DOM.div(null, React.DOM.span(null, React.DOM.b(null,  c.template[key].name),  ": " + v));
+		};
+
+		var createItem = function(i) {
+		
+				if(!c.matchesTemplate(i.val)) {
+					return React.DOM.li({key:  i.key}, "Datan på detta objekt är av felaktigt tema!" );
+				}
+		
+				if(state.isUpdating && (i.key === state.updateTargetKey)) {
+					
+					return (
+								React.DOM.li({className: "list-group-item", key:  i.key}, 				
+									React.DOM.form({id: "updateForm", onSubmit:  function(e) { c.updateWithTemplate(e, i.key); }}, 
+										 _.map(i.val, updating), 
+										React.DOM.button({className: "btn btn-danger", type: "button", onClick:  c.stopUpdating}, "Avbryt" ), 
+										React.DOM.button({className: "btn btn-primary"}, "Ändra bil" )
+									)
+								)
+							);
+				
+				} else {
+					
+					var ex = this.state[i.key + "_extended"] ? _.map(i.val, extending) : "";
+				
+					return (
+								React.DOM.li({'data-status': "closed", className: "list-group-item", key:  i.key}, 
+									React.DOM.a({href: "#", onClick:  function(e) { c.removeObject(e, i.key); }}, "Ta bort" ), 
+									React.DOM.a({id:  i.key, className: "triggerUpdate", href: "#", onClick:  function(e) { c.triggerUpdate(e, i.val); }}, "Ändra" ), 
+									React.DOM.span({className: "trigger", onClick:  function() { this.setExtended(i.key); }.bind(this) },  i.val.name), 
+									React.DOM.div({className: "extended"}, 
+										ex 
+									)
+								)
+							);
+				}
+		}.bind(this);
+		
+		if(c.vehicles !== undefined && c.vehicles.length !== 0) {
+			return React.DOM.ul({className: "list-group", id: "listr"},  c.vehicles.map(createItem) );
+		} else {
+			return React.DOM.ul(null, "Det fanns inga bilar att boka!" );
+		}
+	},
+	
+	setExtended: function(key) {
+		var obj = {};
+		obj[key + "_extended"] = true;
+		if(this.state[key + "_extended"]) {
+			obj[key + "_extended"] = false;
+		}
+		this.setState(obj);
+	}
+});
+
+module.exports = VehicleList;
+},{"react/addons":3,"underscore":163}],169:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var VehicleCRUD = require('./components/app'),
@@ -22911,4 +22997,4 @@ var VehicleCRUD = require('./components/app'),
 React.renderComponent(
   VehicleCRUD(null),
   document.getElementById('main'));
-},{"./components/app":164,"react":162}]},{},[167])
+},{"./components/app":164,"react":162}]},{},[169])

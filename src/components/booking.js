@@ -13,14 +13,14 @@ module.exports = React.createClass({ displayName: "BookingClass",
 
 		var bookedList = function(value, key) {
 			
-			console.log(value);
+			var ex = this.state[value.val.booked.key + "_booking_extended"] ? _.map(value.val.booked.val, extending) : "";
 		
 			return (
 				<li data-status="closed" className="list-group-item">
 					<a id={ value.val.booked.key } href='#' onClick={ function(e) { this.removeBooked(value.val.booked, key); this.props.crud.unbookObject(e, value.val.booked); }.bind(this) }>{ "Avboka" }</a>
-					<div className="trigger">{ "Bokad av: " + value.val.booker }</div>
+					<div className="trigger" onClick={ function() { this.setExtended(value.val.booked.key); }.bind(this) }>{ "Bokad av: " + value.val.booker }</div>
 					<div className="extended">
-						{ _.map(value.val.booked.val, extending) }
+						{ ex }
 					</div>
 				</li>
 			);
@@ -35,6 +35,8 @@ module.exports = React.createClass({ displayName: "BookingClass",
 		var a = function() { if(_.size(this.booked) > 0) { return _.map(this.booked, bookedList); } else { return "Inget är bokat!"; } }.bind(this)();
 		
 		if(this.props.obj !== undefined) {
+			
+			var ex = this.state[this.props.obj.key + "_booking_extended"] ? _.map(this.props.obj.val, extending) : "";
 		
 			return (
 			<div>
@@ -49,9 +51,9 @@ module.exports = React.createClass({ displayName: "BookingClass",
 					<div className="booktarget">
 						<ul className="list-group" id="listb2">
 							<li data-status="closed" className="list-group-item" key={ this.props.obj.key }>
-								<span className="trigger">{ this.props.obj.val.name }</span>
+								<span className="trigger" onClick={ function() { this.setExtended(this.props.obj.key); }.bind(this) }>{ this.props.obj.val.name }</span>
 								<div className="extended">
-									{ _.map(this.props.obj.val, extending) }
+									{ ex }
 								</div>
 							</li>
 						</ul>
@@ -85,6 +87,15 @@ module.exports = React.createClass({ displayName: "BookingClass",
 		
 		}
 	},
+
+	setExtended: function(key) {
+		var obj = {};
+		obj[key + "_booking_extended"] = true;
+		if(this.state[key + "_booking_extended"]) {
+			obj[key + "_booking_extended"] = false;
+		}
+		this.setState(obj);
+	},
 	
 	componentWillMount: function() {
 		
@@ -109,6 +120,8 @@ module.exports = React.createClass({ displayName: "BookingClass",
 	},
 	
 	bookObj: function(e, obj) {
+		
+		e.preventDefault();
 
 		if(this.state.booker_name && this.state.booker_name.trim().length > 0 && this.state.booker_tel && this.state.booker_tel.trim().length > 0) {
 			var newobj = { booker: this.state.booker_name, tel: this.state.booker_tel, booked: obj };
