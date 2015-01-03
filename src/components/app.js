@@ -1,5 +1,4 @@
 /** @jsx React.DOM */
-/* global $ */
 
 var React = require('react/addons');
 var Firebase = require('firebase');
@@ -87,7 +86,6 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 	},
 	
 	componentDidMount: function() {
-		var self = this;
 	
 		/*$("body").on("click", "#listr li .trigger, #listn li .trigger, #listb1 li .trigger, #listb1 li .trigger", function() {
 			if(!self.isUpdating) {

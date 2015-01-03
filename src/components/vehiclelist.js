@@ -6,7 +6,7 @@ var _ = require('underscore');
 var VehicleList = React.createClass({
 	
 	getInitialState: function() {
-		return { ex: "" }
+		return { ex: "" };
 	},
 
     render: function() {

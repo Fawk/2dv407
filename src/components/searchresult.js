@@ -6,7 +6,7 @@ var _ = require('underscore');
 var SearchResult = React.createClass({ displayName: 'SearchResult', 
 	
 	getInitialState: function() {
-		return { ex: "" }
+		return { ex: "" };
 	},
 
 	render: function() {

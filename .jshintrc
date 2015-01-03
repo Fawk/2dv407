@@ -1,8 +1,8 @@
 {
     "maxparams": 5,
     "maxdepth": 5,
-    "maxstatements": 25,
-    "maxcomplexity": 10,
+    "maxstatements": 35,
+    "maxcomplexity": 15,
     "node": true,
     "browser": true,
     "boss": false,

@@ -22077,7 +22077,6 @@ module.exports = require('./lib/React');
 
 },{}],164:[function(require,module,exports){
 /** @jsx React.DOM */
-/* global $ */
 
 var React = require('react/addons');
 var Firebase = require('firebase');
@@ -22165,7 +22164,6 @@ var VehicleCRUD = React.createClass({displayName: 'VehicleCRUD',
 	},
 	
 	componentDidMount: function() {
-		var self = this;
 	
 		/*$("body").on("click", "#listr li .trigger, #listn li .trigger, #listb1 li .trigger, #listb1 li .trigger", function() {
 			if(!self.isUpdating) {
@@ -22494,7 +22492,6 @@ module.exports = React.createClass({ displayName: "BookingClass",
 
 },{"firebase":1,"react/addons":3,"underscore":163}],166:[function(require,module,exports){
 /** @jsx React.DOM */
-/* global $ */
 
 var React = require('react/addons');
 var _ = require('underscore');
@@ -22627,7 +22624,6 @@ var Search = React.createClass({ displayName: 'Search',
 					switch(this.props.template[rk].type) {
 
 						case "number":
-							var fk = key.split("_")[2];
 							
 							if(!(rk in numRanges)) {
 								numRanges[rk] = {};
@@ -22716,7 +22712,7 @@ var Search = React.createClass({ displayName: 'Search',
 	
 	searchLogic: function(rk, v, numRanges) {
 		
-		var g = 0;
+		var g = 0, r = [], f = 0, t = 0;
 		var less = v.indexOf("<");
 		var more = v.indexOf(">");
 		var range = v.indexOf("->");
@@ -22728,8 +22724,8 @@ var Search = React.createClass({ displayName: 'Search',
 		
 		if(range !== -1) {	
 			
-			var r = v.split("->");
-			var f, t;
+			r = v.split("->");
+
 			try {
 				f = parseInt(r[0]);
 				t = parseInt(r[1]);
@@ -22748,7 +22744,6 @@ var Search = React.createClass({ displayName: 'Search',
 			
 		} else if(less !== -1 || more !== -1) {
 			
-			var r, f;
 			if(less !== -1) {
 				r = v.split("<");
 			} else if(more !== -1) {
@@ -22763,9 +22758,9 @@ var Search = React.createClass({ displayName: 'Search',
 			}
 			
 			if(less !== -1) {
-				numRanges[rk] = { "less": true, "from": f }
+				numRanges[rk] = { "less": true, "from": f };
 			} else if(more !== -1) {
-				numRanges[rk] = { "more": true, "from": f }	
+				numRanges[rk] = { "more": true, "from": f };
 			}
 			g++;
 			
@@ -22836,7 +22831,7 @@ var _ = require('underscore');
 var SearchResult = React.createClass({ displayName: 'SearchResult', 
 	
 	getInitialState: function() {
-		return { ex: "" }
+		return { ex: "" };
 	},
 
 	render: function() {
@@ -22901,7 +22896,7 @@ var _ = require('underscore');
 var VehicleList = React.createClass({displayName: 'VehicleList',
 	
 	getInitialState: function() {
-		return { ex: "" }
+		return { ex: "" };
 	},
 
     render: function() {
