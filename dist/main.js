@@ -22520,6 +22520,10 @@ var Search = React.createClass({ displayName: 'Search',
 		var mapFunc = function(value, key) {
 		
 			var error = key.split("_")[0] in this.errors ? this.errors[key.split("_")[0]] : "";
+			var cl = "fieldControl_error";
+			if(error === "") {
+				cl = "fieldControl";
+			}
 
 			switch(this.props.template[key].type) {
 			
@@ -22527,8 +22531,7 @@ var Search = React.createClass({ displayName: 'Search',
 					return (
 							React.DOM.div({className: "search_field"}, 
 								 this.props.template[key].name + ": ", 
-								React.DOM.input({key:  key + "_search_from", placeholder: "Ex: < 1000, > 1000, 1000->2000", ref:  key + "_search_from", className: "from", type: "text", valueLink:  this.linkState(key + "_search_from") }), 
-								React.DOM.span({className: "error"}, error )
+								React.DOM.input({key:  key + "_search", placeholder: "Ex: <10, >10, 10>, 10<, 10->20", ref:  key + "_search", className: cl, type: "text", valueLink:  this.linkState(key + "_search") })
 							)
 						);
 					
@@ -22536,8 +22539,7 @@ var Search = React.createClass({ displayName: 'Search',
 					return (
 						React.DOM.div({className: "search_field"}, 
 							 this.props.template[key].name + ": ", 
-							React.DOM.input({key:  key + "_search", type: "text", className: "string", size: "10", ref:  key + "_search", valueLink:  this.linkState(key + "_search") }), 
-							React.DOM.span({className: "error"}, error )
+							React.DOM.input({key:  key + "_search", type: "text", className: cl, size: "10", ref:  key + "_search", valueLink:  this.linkState(key + "_search") })
 						)
 					);
 					
@@ -22554,7 +22556,9 @@ var Search = React.createClass({ displayName: 'Search',
 		
 		return (
 			React.DOM.div({className: "search"}, 
-				SearchResult({result:  this.state.searchResult, crud:  this.props.crud}), 
+				React.DOM.div({className: "search_result"}, 
+					SearchResult({result:  this.state.searchResult, crud:  this.props.crud, errors:  this.errors})
+				), 
 				React.DOM.form({id: "searchForm", onSubmit:  this.handleSubmit}, 
 					 _.map(this.options, mapFunc), 
 					React.DOM.button({className: "btn btn-primary"}, "Sök" )
@@ -22722,11 +22726,10 @@ var Search = React.createClass({ displayName: 'Search',
 		if(range !== -1) {	
 			
 			r = v.split("->");
-
-			try {
-				f = parseInt(r[0]);
-				t = parseInt(r[1]);
-			} catch(err) {
+			f = parseInt(r[0]);
+			t = parseInt(r[1]);
+			
+			if(isNaN(f) || isNaN(t)) {
 				this.stopSearchWithError(rk, "Inte giltigt nummerformat!");
 				return {};
 			}
@@ -22747,11 +22750,22 @@ var Search = React.createClass({ displayName: 'Search',
 				r = v.split(">");
 			}
 			
-			try {
-				f = parseInt(r[1]);
-			} catch(err) {
-				this.stopSearchWithError(rk, "Inte giltigt nummerformat!");
-				return {};
+			f = parseInt(r[1]);
+			
+			if(isNaN(f)) {
+				f = parseInt(r[0]);
+				if(isNaN(f)) {
+					this.stopSearchWithError(rk, "Inte giltigt nummerformat!");
+					return {};
+				} else {
+					if(less !== -1) {
+						less = -1;
+						more = 1;
+					} else {
+						less = 1;
+						more = -1;
+					}
+				}
 			}
 			
 			if(less !== -1) {
@@ -22772,8 +22786,9 @@ var Search = React.createClass({ displayName: 'Search',
 	},
 	
 	stopSearchWithError: function(key, msg) {
+		
 		this.stopSearch = true;
-		this.errors[key] = msg;
+		this.errors[key] = { msg: msg, field: this.props.template[key] };
 		this.setState({ hasError: true });
 	},
 	
@@ -22846,7 +22861,7 @@ var SearchResult = React.createClass({ displayName: 'SearchResult',
 				return (
 					React.DOM.li({'data-status': "closed", className: "list-group-item", key:  obj.match.key}, 
 						React.DOM.a({id:  obj.match.key, href: "#", onClick:  function(e) { this.props.crud.bookObject(e, obj.match); }.bind(this) }, "Boka" ), 
-						React.DOM.span({className: "trigger", onClick:  function() { this.setExtended(obj.match.key); }.bind(this) },  obj.match.val.name), 
+						React.DOM.span({className: "trigger", onClick:  function(e) { this.setExtended(e, obj.match.key); }.bind(this) },  obj.match.val.name), 
 						React.DOM.div({className: "extended"}, 
 							ex 
 						)
@@ -22855,7 +22870,11 @@ var SearchResult = React.createClass({ displayName: 'SearchResult',
 			}
 		}.bind(this);
 		
-		if(this.props.result) {
+		var errorList = function(obj) {
+			return React.DOM.div({className: "error-field"}, React.DOM.b(null,  obj.field.name + ": "), React.DOM.i(null,  obj.msg));
+		}.bind(this);
+		
+		if(this.props.result !== undefined && this.props.result.hits > 0) {
 		
 			return (
 				React.DOM.div({className: "scroll"}, 
@@ -22866,12 +22885,22 @@ var SearchResult = React.createClass({ displayName: 'SearchResult',
 				)
 			);
 		
+		} else if(_.size(this.props.errors) > 0) {
+			return (
+				React.DOM.div({className: "panel panel-danger"}, 
+					React.DOM.div({className: "panel-heading"}, "Fel inträffade!"), 
+					React.DOM.div({className: "panel-body"}, 
+						 _.map(this.props.errors, errorList) 
+					)
+				)
+			);
 		} else {
 			return null;
 		}
 	},
 	
-	setExtended: function(key) {
+	setExtended: function(e, key) {
+		e.preventDefault();
 		var obj = {};
 
 		obj[key + "_search_extended"] = true;

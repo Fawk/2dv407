@@ -24,7 +24,7 @@ var SearchResult = React.createClass({ displayName: 'SearchResult',
 				return (
 					<li data-status="closed" className="list-group-item" key={ obj.match.key }>
 						<a id={ obj.match.key } href='#' onClick={ function(e) { this.props.crud.bookObject(e, obj.match); }.bind(this) }>{ "Boka" }</a>
-						<span className="trigger" onClick={ function() { this.setExtended(obj.match.key); }.bind(this) }>{ obj.match.val.name }</span>
+						<span className="trigger" onClick={ function(e) { this.setExtended(e, obj.match.key); }.bind(this) }>{ obj.match.val.name }</span>
 						<div className="extended">
 							{ ex }
 						</div>
@@ -33,7 +33,11 @@ var SearchResult = React.createClass({ displayName: 'SearchResult',
 			}
 		}.bind(this);
 		
-		if(this.props.result) {
+		var errorList = function(obj) {
+			return <div className="error-field"><b>{ obj.field.name + ": " }</b><i>{ obj.msg }</i></div>;
+		}.bind(this);
+		
+		if(this.props.result !== undefined && this.props.result.hits > 0) {
 		
 			return (
 				<div className="scroll">
@@ -44,12 +48,22 @@ var SearchResult = React.createClass({ displayName: 'SearchResult',
 				</div>
 			);
 		
+		} else if(_.size(this.props.errors) > 0) {
+			return (
+				<div className="panel panel-danger">
+					<div className="panel-heading">Fel inträffade!</div>
+					<div className="panel-body">
+						{ _.map(this.props.errors, errorList) }
+					</div>
+				</div>
+			);
 		} else {
 			return null;
 		}
 	},
 	
-	setExtended: function(key) {
+	setExtended: function(e, key) {
+		e.preventDefault();
 		var obj = {};
 
 		obj[key + "_search_extended"] = true;

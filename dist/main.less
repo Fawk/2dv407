@@ -56,6 +56,7 @@
 }
 
 .searchContainer {
+	.search_result { padding:20px; }
 	&:extend(.addContainer);
 	.title { &:extend(.addContainer .title); }
 	.scroll { 
@@ -83,6 +84,13 @@
 		height: 34px;
 		line-height:34px;
 	}
+	
+		
+	.panel {
+		font-size:0.9em;
+		color:#a94442;
+	}
+	
 }
 
 .bookingContainer {
@@ -151,16 +159,31 @@
 		margin:3px;
 	}
 	
-	input[type="text"], input[type="number"] {
+	.fieldControl {
 		&:extend(.form-control);
 		width:73%;
 		display:block;
 		float:right;
+		
+
 	}
 	
+	.fieldControl_error {
+		&:extend(#searchForm .fieldControl);
+		
+		border-color:#a94442;
+		-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075);
+		box-shadow:inset 0 1px 1px rgba(0,0,0,.075);
+		
+		&:focus {
+			border-color:#843534;
+			-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075) 0 0 6px #ce8483;
+			box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 6px #ce8483
+		}
+	}
 	.error {
 		color:red;
-		display:block;
+		
 	}
 
 }

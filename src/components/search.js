@@ -27,6 +27,10 @@ var Search = React.createClass({ displayName: 'Search',
 		var mapFunc = function(value, key) {
 		
 			var error = key.split("_")[0] in this.errors ? this.errors[key.split("_")[0]] : "";
+			var cl = "fieldControl_error";
+			if(error === "") {
+				cl = "fieldControl";
+			}
 
 			switch(this.props.template[key].type) {
 			
@@ -34,8 +38,7 @@ var Search = React.createClass({ displayName: 'Search',
 					return (
 							<div className="search_field">
 								{ this.props.template[key].name + ": "}
-								<input key={ key + "_search_from" } placeholder={ "Ex: < 1000, > 1000, 1000->2000" } ref={ key + "_search_from" } className="from" type="text" valueLink={ this.linkState(key + "_search_from") } />
-								<span className="error">{ error }</span>
+								<input key={ key + "_search" } placeholder={ "Ex: <10, >10, 10>, 10<, 10->20" } ref={ key + "_search" } className={ cl } type="text" valueLink={ this.linkState(key + "_search") } />
 							</div>
 						);
 					
@@ -43,8 +46,7 @@ var Search = React.createClass({ displayName: 'Search',
 					return (
 						<div className="search_field">
 							{ this.props.template[key].name + ": " }
-							<input key={ key + "_search" } type='text' className='string' size='10' ref={ key + "_search" } valueLink={ this.linkState(key + "_search") } />
-							<span className="error">{ error }</span>
+							<input key={ key + "_search" } type='text' className={ cl } size='10' ref={ key + "_search" } valueLink={ this.linkState(key + "_search") } />
 						</div>
 					);
 					
@@ -61,7 +63,9 @@ var Search = React.createClass({ displayName: 'Search',
 		
 		return (
 			<div className='search'>
-				<SearchResult result={ this.state.searchResult } crud={ this.props.crud } />
+				<div className="search_result">
+					<SearchResult result={ this.state.searchResult } crud={ this.props.crud } errors={ this.errors } />
+				</div>
 				<form id={ "searchForm" } onSubmit={ this.handleSubmit }>
 					{ _.map(this.options, mapFunc) }
 					<button className="btn btn-primary">{ "Sök" }</button>
@@ -229,11 +233,10 @@ var Search = React.createClass({ displayName: 'Search',
 		if(range !== -1) {	
 			
 			r = v.split("->");
-
-			try {
-				f = parseInt(r[0]);
-				t = parseInt(r[1]);
-			} catch(err) {
+			f = parseInt(r[0]);
+			t = parseInt(r[1]);
+			
+			if(isNaN(f) || isNaN(t)) {
 				this.stopSearchWithError(rk, "Inte giltigt nummerformat!");
 				return {};
 			}
@@ -254,11 +257,22 @@ var Search = React.createClass({ displayName: 'Search',
 				r = v.split(">");
 			}
 			
-			try {
-				f = parseInt(r[1]);
-			} catch(err) {
-				this.stopSearchWithError(rk, "Inte giltigt nummerformat!");
-				return {};
+			f = parseInt(r[1]);
+			
+			if(isNaN(f)) {
+				f = parseInt(r[0]);
+				if(isNaN(f)) {
+					this.stopSearchWithError(rk, "Inte giltigt nummerformat!");
+					return {};
+				} else {
+					if(less !== -1) {
+						less = -1;
+						more = 1;
+					} else {
+						less = 1;
+						more = -1;
+					}
+				}
 			}
 			
 			if(less !== -1) {
@@ -279,8 +293,9 @@ var Search = React.createClass({ displayName: 'Search',
 	},
 	
 	stopSearchWithError: function(key, msg) {
+		
 		this.stopSearch = true;
-		this.errors[key] = msg;
+		this.errors[key] = { msg: msg, field: this.props.template[key] };
 		this.setState({ hasError: true });
 	},
 	
